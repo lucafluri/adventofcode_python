@@ -32,8 +32,8 @@ def generate_day(year, day):
         with open(day_script, 'r') as file:
             script_content = file.read()
 
-        script_content = script_content.replace('YEAR = 2020', f'YEAR = {year}')
-        script_content = script_content.replace('DAY = 3', f'DAY = {day}')
+        script_content = script_content.replace('YEAR', f'{year}')
+        script_content = script_content.replace('DAY', f'{day}')
 
         with open(day_script, 'w') as file:
             file.write(script_content)

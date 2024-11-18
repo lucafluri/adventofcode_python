@@ -4,8 +4,6 @@ from puzzle_runner import test_with_example, submit_solutions
 import collections
 import math
 
-YEAR = 2020
-DAY = 3
 
 
 def solve_part_one(input_data):
@@ -28,4 +26,4 @@ def run():
     test_with_example(YEAR, DAY, solve_part_one, solve_part_two)
 
     # Use puzzle runner to submit solutions
-    #submit_solutions(YEAR, DAY, solve_part_one, solve_part_two)
+    submit_solutions(YEAR, DAY, solve_part_one, solve_part_two)
