@@ -1,0 +1,4 @@
+{
+    "vim.disableExtension": false,
+    "vim.camelCaseMotion.enable": false
+}
