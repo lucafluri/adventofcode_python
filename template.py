@@ -26,4 +26,29 @@ def run():
     test_with_example(YEAR, DAY, solve_part_one, solve_part_two)
 
     # Use puzzle runner to submit solutions
-    submit_solutions(YEAR, DAY, solve_part_one, solve_part_two)
+    #submit_solutions(YEAR, DAY, solve_part_one, solve_part_two)
+
+
+# Graphs
+'''
+import networkx as nx
+G = nx.Graph()
+# G.add_edge(3, 1)
+nx.shortest_path(G, -1, 5)
+'''
+
+# Assembler interpreter
+'''
+prog = s.splitlines()
+pc = 0
+regs = []
+while 0 <= pc < len(prog):
+    op = prog[pc]
+    if op == 1:
+        ...
+    elif op == 2:
+        ...
+    else:
+        assert False
+    pc += 1
+'''

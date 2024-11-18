@@ -17,6 +17,7 @@ def test_with_example(year, day, solve_part_one, solve_part_two):
     """
     # Fetch the puzzle for the specified day
     puzzle = Puzzle(year=year, day=day)
+    # Determine base directory for inputs
 
     # Read example data
     example_data = puzzle.examples[0].input_data
@@ -32,12 +33,13 @@ def test_with_example(year, day, solve_part_one, solve_part_two):
     print(f"Part One Example Time: {example_part_one_time:.9f} seconds")
 
     # Test part two with timing
-    if puzzle.examples[0].answer_b is None:  # Skip if there is no part two
-        return
+    # if puzzle.examples[0].answer_b is None:  # Skip if there is no part two
+    #     return
     start_time = time.perf_counter_ns()
     example_part_two_result = solve_part_two(example_data)
     example_part_two_time = (time.perf_counter_ns() - start_time) / 1e9
-    if example_part_two_result == int(puzzle.examples[0].answer_b):
+    
+    if example_part_two_result == int(puzzle.examples[0].answer_b) if puzzle.examples[0].answer_b != None  else 0:
         print("\033[1;92mPart Two Example Test Passed!\033[0m")
     else:
         print(f"\033[1;91mPart Two Example Test Failed: Expected {puzzle.examples[0].answer_b}, Got {example_part_two_result}\033[0m")
@@ -86,14 +88,22 @@ def submit_solutions(year, day, solve_part_one, solve_part_two):
         except Exception as e:
             print(f"\033[1;91mPart One Submission Failed: {e}\033[0m")
 
-    # Ask for confirmation before submitting part two result
-    confirm = input("Submit Part Two result? (y/n): ").strip().lower()
-    if confirm == 'y':
-        try:
-            submit(part_two_result, part="b", day=day, year=year)
-            print("\033[1;92mPart Two Submission Successful!\033[0m")
-        except Exception as e:
-            print(f"\033[1;91mPart Two Submission Failed: {e}\033[0m")
+    # Fetch the puzzle for the specified day
+    puzzle = Puzzle(year=year, day=day)
+
+    # Check if example answer for part b is available
+    # if puzzle.examples[0].answer_b is not None:
+    if 1:
+        # Ask for confirmation before submitting part two result
+        confirm = input("Submit Part Two result? (y/n): ").strip().lower()
+        if confirm == 'y':
+            try:
+                submit(part_two_result, part="b", day=day, year=year)
+                print("\033[1;92mPart Two Submission Successful!\033[0m")
+            except Exception as e:
+                print(f"\033[1;91mPart Two Submission Failed: {e}\033[0m")
+    else:
+        print("\033[1;93mExample answer for part b is not available. Skipping Part Two submission.\033[0m")
 
 
 def run_day_solutions(year, day):

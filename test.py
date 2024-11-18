@@ -87,8 +87,8 @@ while 0 <= pc < len(prog):
 '''
 import networkx as nx
 G = nx.Graph()
-# G.add_edge(5, 1)
-nx.shortest_path(G, 1, 5)
+# G.add_edge(3, 1)
+nx.shortest_path(G, -1, 5)
 '''
 
 '''^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'''
