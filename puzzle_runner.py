@@ -2,9 +2,19 @@ from aocd import submit
 from aocd.models import Puzzle
 import os
 import time
+import importlib
 
 
 def test_with_example(year, day, solve_part_one, solve_part_two):
+    """
+    Test the solutions for part one and part two with example data.
+
+    Args:
+        year (int): The year of the puzzle.
+        day (int): The day of the puzzle.
+        solve_part_one (function): The function to solve part one.
+        solve_part_two (function): The function to solve part two.
+    """
     # Fetch the puzzle for the specified day
     puzzle = Puzzle(year=year, day=day)
 
@@ -22,7 +32,7 @@ def test_with_example(year, day, solve_part_one, solve_part_two):
     print(f"Part One Example Time: {example_part_one_time:.9f} seconds")
 
     # Test part two with timing
-    if(puzzle.examples[0].answer_b is None):  # Skip if there is no part two
+    if puzzle.examples[0].answer_b is None:  # Skip if there is no part two
         return
     start_time = time.perf_counter_ns()
     example_part_two_result = solve_part_two(example_data)
@@ -35,6 +45,15 @@ def test_with_example(year, day, solve_part_one, solve_part_two):
 
 
 def submit_solutions(year, day, solve_part_one, solve_part_two):
+    """
+    Submit the solutions for part one and part two after testing with actual input data.
+
+    Args:
+        year (int): The year of the puzzle.
+        day (int): The day of the puzzle.
+        solve_part_one (function): The function to solve part one.
+        solve_part_two (function): The function to solve part two.
+    """
     print("\033[90mSubmitting solutions...\n=======================\033[0m")
     # Determine base directory for inputs
     base_dir = os.path.join(os.path.dirname(__file__), str(year), f'day_{day:02}')
@@ -75,3 +94,70 @@ def submit_solutions(year, day, solve_part_one, solve_part_two):
             print("\033[1;92mPart Two Submission Successful!\033[0m")
         except Exception as e:
             print(f"\033[1;91mPart Two Submission Failed: {e}\033[0m")
+
+
+def run_day_solutions(year, day):
+    """
+    Automatically retrieve and run both solution functions for a given day, returning their execution times and correctness.
+
+    Args:
+        year (int): The year of the puzzle.
+        day (int): The day of the puzzle.
+
+    Returns:
+        tuple: A tuple containing the execution times for part one and part two, and their correctness.
+    """
+    # Fetch the puzzle for the specified day
+    puzzle = Puzzle(year=year, day=day)
+
+    # Read example data
+    example_data = puzzle.examples[0].input_data
+
+    # Determine base directory for inputs
+    base_dir = os.path.join(os.path.dirname(__file__), str(year), f'day_{day:02}')
+
+    # Read input data
+    input_file = os.path.join(base_dir, "inputs", "input.txt")
+    with open(input_file, 'r') as f:
+        input_data = f.read()
+
+    # Import the module dynamically
+    module_name = f'{year}.day_{day:02}.day{day:02}'
+    try:
+        module = importlib.import_module(module_name)
+    except ModuleNotFoundError:
+        print(f"Module for day {day} not found.")
+        return None
+
+    # Retrieve solution functions
+    solve_part_one = getattr(module, 'solve_part_one', None)
+    solve_part_two = getattr(module, 'solve_part_two', None)
+
+    # Check if both functions exist
+    if not solve_part_one or not solve_part_two:
+        print(f"Solution functions for day {day} are missing.")
+        return None
+
+    # Solve part one with timing and correctness
+    start_time = time.perf_counter_ns()
+    part_one_example_result = solve_part_one(example_data)
+    part_one_input_result = solve_part_one(input_data)
+    part_one_time = (time.perf_counter_ns() - start_time) / 1e9
+    part_one_correct_example = part_one_example_result == int(puzzle.examples[0].answer_a)
+    try:
+        part_one_correct_input = part_one_input_result == int(puzzle.answer_a)
+    except AttributeError:
+        part_one_correct_input = False
+
+    # Solve part two with timing and correctness
+    start_time = time.perf_counter_ns()
+    part_two_example_result = solve_part_two(example_data)
+    part_two_input_result = solve_part_two(input_data)
+    part_two_time = (time.perf_counter_ns() - start_time) / 1e9
+    part_two_correct_example = part_two_example_result == int(puzzle.examples[0].answer_b) if puzzle.examples[0].answer_b is not None else False
+    try:
+        part_two_correct_input = part_two_input_result == int(puzzle.answer_b)
+    except AttributeError:
+        part_two_correct_input = False
+
+    return (part_one_time, part_one_correct_example, part_one_correct_input), (part_two_time, part_two_correct_example, part_two_correct_input)
