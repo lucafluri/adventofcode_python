@@ -44,6 +44,13 @@ def run_all_days(year):
 
 
 if __name__ == "__main__":
+    # Manually read the .env file and set the AOC_SESSION variable
+    with open('.env') as f:
+        for line in f:
+            if line.startswith('AOC_SESSION'):
+                AOC_SESSION = line.strip().split('=')[1]
+                os.environ['AOC_SESSION'] = AOC_SESSION
+
     parser = argparse.ArgumentParser(description="Run all available days in a given year and display execution timings.")
     parser.add_argument("year", type=int, help="The year to run the solutions for.")
     args = parser.parse_args()
