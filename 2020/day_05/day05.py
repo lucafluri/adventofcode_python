@@ -4,36 +4,40 @@ from puzzle_runner import test_with_example, submit_solutions
 import collections
 import math
 
+
+
 def getLower(t):
     return (t[0], int((t[1]-t[0])/2)+t[0])
 
 def getUpper(t):
-    return (int(t[1]/2), t[1])
+    return (int((t[1]-t[0])/2 + t[0])+1, t[1])
 
 def calcRow(p):
     row = (0, 127)
     
     rc = p[:-3]
-    print(p, rc)
+    # print(p, rc)
 
     for c in rc:
-        print(row)
         if(c=='F'):
             row = getLower(row)
         if(c=='B'):
             row = getUpper(row)
+        # print(row)
+
     return row[0]
 
 def calcCol(p):
     col = (0, 7)
     rc = p[7:]
-    print(p, rc)
+    # print(p, rc)
     for c in rc:
-        print(col)
         if(c=='L'):
             col = getLower(col)
         if(c=='R'):
             col = getUpper(col)
+        # print(col)
+
     return col[0]
 
             
@@ -51,7 +55,8 @@ def solve_part_one(input_data):
         id = r*8 + c
         if(id>maxID):
             maxID = id
-        print(r, c, id)
+        
+        # print(r, c, id)
     return maxID
 
 
@@ -64,7 +69,7 @@ def run():
     test_with_example(2020, 5, solve_part_one, solve_part_two)
 
     # Use puzzle runner to submit solutions
-    #submit_solutions(2020, 5, solve_part_one, solve_part_two)
+    submit_solutions(2020, 5, solve_part_one, solve_part_two)
 
 
 # Graphs
