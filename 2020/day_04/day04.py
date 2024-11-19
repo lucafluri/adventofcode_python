@@ -18,9 +18,10 @@ REQUIRED_PASSPORT_FIELDS = {
 }
 
 passports = []
-
+validStep1 = 0
 
 def solve_part_one(input_data):
+    passports.clear()
     linesPassports = input_data.split("\n\n")
     valid = 0
     for passport in linesPassports:
@@ -31,16 +32,12 @@ def solve_part_one(input_data):
         if all(field in passportDict for field in REQUIRED_PASSPORT_FIELDS):
             valid += 1
             passports.append(passportDict)
-            print("Valid: " + str(passportDict))
-
-    print(len(passports))
-    print(valid)
     return valid
 
 
 def solve_part_two(input_data):
-    print(len(passports))
     valid = len(passports)
+    # valid = validStep1
     for passport in passports:
         for key in passport.keys():
             if key == 'byr':
@@ -72,8 +69,6 @@ def solve_part_two(input_data):
                 if not re.match(r'^[0-9]{9}$', passport[key]):
                     valid -= 1
                     break
-    # print(len(passports))
-    print(valid)
     return valid
 
 
