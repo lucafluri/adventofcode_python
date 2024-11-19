@@ -5,6 +5,7 @@ import collections
 import math
 
 
+setOfIDs = {0}
 
 def getLower(t):
     return (t[0], int((t[1]-t[0])/2)+t[0])
@@ -14,30 +15,22 @@ def getUpper(t):
 
 def calcRow(p):
     row = (0, 127)
-    
     rc = p[:-3]
-    # print(p, rc)
-
     for c in rc:
         if(c=='F'):
             row = getLower(row)
         if(c=='B'):
             row = getUpper(row)
-        # print(row)
-
     return row[0]
 
 def calcCol(p):
     col = (0, 7)
     rc = p[7:]
-    # print(p, rc)
     for c in rc:
         if(c=='L'):
             col = getLower(col)
         if(c=='R'):
             col = getUpper(col)
-        # print(col)
-
     return col[0]
 
             
@@ -46,7 +39,6 @@ def solve_part_one(input_data):
     passes = []
     passes.clear()
     passes = input_data.splitlines()
-    
     maxID = 0
     
     for p in passes:
@@ -55,12 +47,17 @@ def solve_part_one(input_data):
         id = r*8 + c
         if(id>maxID):
             maxID = id
+        setOfIDs.add(id)
         
-        # print(r, c, id)
     return maxID
 
 
 def solve_part_two(input_data):
+    for i in setOfIDs:
+        if(i == 0 or i == max(setOfIDs)):
+            continue
+        if((i+1) not in setOfIDs):
+            return i+1
     return 0
 
 
