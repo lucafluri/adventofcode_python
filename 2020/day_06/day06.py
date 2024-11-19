@@ -15,7 +15,6 @@ def solve_part_one(input_data):
             charSet.add(char)
         count += len(charSet)
     return count
-        
 
 
 def solve_part_two(input_data):
