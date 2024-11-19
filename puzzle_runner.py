@@ -3,6 +3,7 @@ from aocd.models import Puzzle
 import os
 import time
 import importlib
+from input_manager import get_input_data
 
 
 def test_with_example(year, day, solve_part_one, solve_part_two):
@@ -20,7 +21,8 @@ def test_with_example(year, day, solve_part_one, solve_part_two):
     # Determine base directory for inputs
 
     # Read example data
-    example_data = puzzle.examples[0].input_data
+    # example_data = puzzle.examples[0].input_data
+    example_data = get_input_data(os.path.join(os.path.dirname(__file__), str(year), f'day_{day:02}'))[0]
 
     # Test part one with timing
     start_time = time.perf_counter_ns()
