@@ -42,7 +42,7 @@ def test_with_example(year, day, solve_part_one, solve_part_two):
     example_part_two_time = (time.perf_counter_ns() - start_time) / 1e9
     
     if example_part_two_result == int(puzzle.examples[0].answer_b) if puzzle.examples[0].answer_b != None  else 0:
-        print("\033[1;92mPart Two Example Test Passed!\033[0m")
+        print(f"\033[1;92mPart Two Example Test Passed!: {example_part_two_result}\033[0m")
     else:
         print(f"\033[1;91mPart Two Example Test Failed: Expected {puzzle.examples[0].answer_b}, Got {example_part_two_result}\033[0m")
     print(f"Part Two Example Time: {example_part_two_time:.9f} seconds")
