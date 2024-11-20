@@ -1,8 +1,4 @@
-import os
-from input_manager import download_and_store_data
-from puzzle_runner import test_with_example, submit_solutions
-import collections
-import math
+from utils.aoc import *
 
 
 slopes = [(3, 1), (1, 1), (5, 1), (7, 1), (1, 2)]

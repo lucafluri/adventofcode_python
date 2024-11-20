@@ -1,9 +1,5 @@
-import os
-from input_manager import download_and_store_data
-from puzzle_runner import test_with_example, submit_solutions
-import collections
-import math
-import re
+from utils.aoc import *
+
 
 # Required passport fields
 REQUIRED_PASSPORT_FIELDS = {
