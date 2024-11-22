@@ -5,8 +5,18 @@ from input_manager import download_and_store_data
 from puzzle_runner import test_with_example, submit_solutions
 
 # Common Utils
+
 DIR4 = [(-1, 0), (1, 0), (0, -1), (0, 1)] # Left, Right, Up, Down
-DIR8 = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)] # Left, Right, Up, Down, UpLeft, UpRight, DownLeft, DownRight
+DIR8 = [
+    (-1, 0),  # West
+    (1, 0),   # East
+    (0, -1),  # North
+    (0, 1),   # South
+    (-1, -1), # NorthWest
+    (-1, 1),  # NorthEast
+    (1, -1),  # SouthWest
+    (1, 1)    # SouthEast
+]
 
 
 # Input Parsing
@@ -26,7 +36,7 @@ def input_as_ints(string) -> list:
 
 def input_as_grid(string) -> list:
     """Return input as 2D grid"""
-    return [list(line) for line in input_as_lines(string)]
+    return list(list(line) for line in input_as_lines(string))
 
 
 #Functional Utils

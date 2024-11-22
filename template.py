@@ -2,11 +2,11 @@ from utils.aoc import *
 
 
 def solve_part_one(input_data):
-    return 0
+    return None
 
 
 def solve_part_two(input_data):
-    return 0
+    return None
 
 
 def run():

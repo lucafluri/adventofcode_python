@@ -1,64 +1,66 @@
 from utils.aoc import *
+import copy
+
+floor, empty, occupied = '.L#'
+crowdedLimit = 4
+
 
 # Check all 8 adjacent seats if all empty return true
-def emptyToOccupied(grid, y, x):
-    for (dy, dx) in DIR8:
-        if x+dx < 0 or x+dx >= len(grid[0]) or y+dy < 0 or y+dy >= len(grid):
+def emptyToOccupied(grid, x, y):
+    for (dx, dy) in DIR8:
+        if not (0 <= x+dx < len(grid[0]) and 0 <= y+dy < len(grid)):
             continue
-        if grid[y+dy][x+dx] == '#':
+        if grid[y+dy][x+dx] == occupied:
             return False
     return True
 
 # If four or more adjacent seats are occupied, return true
-def occupiedToEmpty(grid, y, x):
+def occupiedToEmpty(grid, x, y):
     count = 0
-    for (dy, dx) in DIR8:
-        if x+dx < 0 or x+dx >= len(grid[0]) or y+dy < 0 or y+dy >= len(grid):
+    for (dx, dy) in DIR8:
+        if not (0 <= x+dx < len(grid[0]) and 0 <= y+dy < len(grid)):
             continue
-        if grid[y+dy][x+dx] == '#':
+        if grid[y+dy][x+dx] == occupied:
             count += 1
-    if count >= 4:
+    if count >= crowdedLimit:
         return True
     return False
 
 
 def run_round(ref):
-    mutated = ref.copy()
+    mutated = copy.deepcopy(ref)
     for y in range(len(ref)):
         for x in range(len(ref[0])):
-            if ref[y][x] == 'L':
-                if emptyToOccupied(ref, y, x):
-                    mutated[y][x] = '#'
-            elif ref[y][x] == '#':
-                if occupiedToEmpty(ref, y, x):
-                    mutated[y][x] = 'L'
-    print_grid(mutated)
+            if ref[y][x] == empty and emptyToOccupied(ref, x, y):
+                    mutated[y][x] = occupied
+            elif ref[y][x] == occupied and occupiedToEmpty(ref, x, y):
+                    mutated[y][x] = empty
+    # print_grid(mutated)
     return mutated
 
 
 def solve_part_one(input_data):
     grid = input_as_grid(input_data)
-    grid2 = input_as_grid(input_data)
-
-    print_grid(grid)
-    # grid2 = run_round(grid)
-    # grid2 = grid.copy()
-    # grid = run_round(grid)
-    # grid2 = grid.copy()
     
+    # print_grid(grid)
+    old = grid
     while True:
-        grid = run_round(grid)
-        if grid == grid2:
-            # print_grid(grid)
-            return sum([row.count('#') for row in grid])
-        grid2 = grid.copy()
+        new_grid = run_round(old)
+        if new_grid == old:
+            return sum([row.count(occupied) for row in new_grid])
+        old = new_grid
+        
     
-    
-    return 0
+    return None
 
 
 def solve_part_two(input_data):
-    return 0
+    grid = input_as_grid(input_data)
+    crowdedLimit = 5
+    
+    
+    
+    return None
 
 
 def run():
@@ -66,6 +68,4 @@ def run():
     test_with_example(2020, 11, solve_part_one, solve_part_two)
 
     # Use puzzle runner to submit solutions
-    #submit_solutions(2020, 11, solve_part_one, solve_part_two)
-
-
+    submit_solutions(2020, 11, solve_part_one, solve_part_two)
