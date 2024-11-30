@@ -1,6 +1,5 @@
 from utils.aoc import *
 
-
 def solve_part_one(input_data):
     earliest, busses = input_data.splitlines()
     earliest = int(earliest)
@@ -16,7 +15,15 @@ def solve_part_one(input_data):
 
 
 def solve_part_two(input_data):
-    return None
+    _, busses = input_data.splitlines()
+    # get offset and bus ids
+    busses = [(i, int(b)) for i, b in enumerate(busses.split(',')) if b != 'x']
+
+    # Use Chinese Remainder Theorem to find the earliest timestamp
+    n = [bus_id for _, bus_id in busses]
+    a = [-i % bus_id for i, bus_id in busses]
+
+    return chinese_remainder(n, a)
 
 
 def run():

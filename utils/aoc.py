@@ -1,5 +1,6 @@
 import collections, math, re
 import itertools as it
+from functools import *
 import bisect
 from input_manager import download_and_store_data
 from puzzle_runner import test_with_example, submit_solutions
@@ -52,6 +53,42 @@ def product(iterable) -> int:
     """Return product of items in iterable"""
     return math.prod(iterable)
 
+
+# Math Utils
+# Helper function for Chinese Remainder Theorem
+def chinese_remainder(n, a):
+    """
+    Takes in a list of remainders (a) and a list of moduli (n)
+    Solve the equation
+        x = a_0 (mod n_0)
+        x = a_1 (mod n_1)
+        ...
+        x = a_{n-1} (mod n_{n-1})
+    for x.
+    """
+    sum = 0
+    prod = reduce(lambda a, b: a*b, n)
+    for n_i, a_i in zip(n, a):
+        p = prod // n_i
+        sum += a_i * mul_inv(p, n_i) * p
+    return sum % prod
+
+# Helper function to find modular inverse
+def mul_inv(a, b):
+    """
+    Takes two integers a and b.
+    Returns the integer such that (a * x) % b == 1
+    """
+    
+    b0 = b
+    x0, x1 = 0, 1
+    if b == 1: return 1
+    while a > 1:
+        q = a // b
+        a, b = b, a % b
+        x0, x1 = x1 - q * x0, x0
+    if x1 < 0: x1 += b0
+    return x1
 
 # Useful Code
 
