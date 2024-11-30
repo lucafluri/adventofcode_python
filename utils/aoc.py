@@ -90,9 +90,66 @@ def mul_inv(a, b):
     if x1 < 0: x1 += b0
     return x1
 
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+def lcm(a, b):
+    return a * b // gcd(a, b)
+
+def lcm_list(nums):
+    return reduce(lcm, nums, 1)
+
+def gcd_list(nums):
+    return reduce(gcd, nums, nums[0])
+
+def manhattan_distance(x1, y1, x2, y2):
+    return abs(x1 - x2) + abs(y1 - y2)
+
+
+
 # Useful Code
 
 # Graphs
+'''
+from collections import deque
+queue = deque()
+queue.append((0, 0))
+visited = set()
+visited.add((0, 0))
+while queue:
+    x, y = queue.popleft()
+    for dx, dy in DIR4:
+        nx, ny = x + dx, y + dy
+        if (nx, ny) in visited:
+            continue
+        visited.add((nx, ny))
+        queue.append((nx, ny))
+'''
+
+'''General DFS
+def dfs(graph, start):
+    visited, stack = set(), [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(graph[vertex] - visited)
+    return visited
+'''
+
+'''
+# General Karger Alorithm to find minimum cut in a graph
+def karger_stein(g):
+    while len(g) > 2:
+        u, v = random.sample(g.nodes(), 2)
+        g.remove_node(u)
+        g.remove_node(v)
+        g.add_edge(u, v)
+    return g
+'''
+
 '''
 import networkx as nx
 G = nx.Graph()
