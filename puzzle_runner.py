@@ -16,6 +16,7 @@ def test_with_example(year, day, solve_part_one, solve_part_two):
         solve_part_one (function): The function to solve part one.
         solve_part_two (function): The function to solve part two.
     """
+    print(f"Year: {year}, Day: {day}")
     # Fetch the puzzle for the specified day
     puzzle = Puzzle(year=year, day=day)
     # Determine base directory for inputs

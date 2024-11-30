@@ -10,12 +10,30 @@ with open('.env') as f:
             os.environ['AOC_SESSION'] = AOC_SESSION
 
 
-if len(sys.argv) != 3:
-    print("Usage: python main.py <year> <day>")
-    sys.exit(1)
+# If no arguments are provided, determine the latest year and day
+if len(sys.argv) == 1:
+    # Assuming the directory structure is organized by year and day
+    years = sorted([d for d in os.listdir('.') if d.isdigit() and len(d) == 4], reverse=True)
+    if years:
+        latest_year = years[0]
+        days = sorted([d for d in os.listdir(latest_year) if d.startswith('day_')], reverse=True)
+        if days:
+            latest_day = days[0].split('_')[1]
+            year = latest_year
+            day = latest_day
+        else:
+            print(f"No days found for the latest year {latest_year}.")
+            sys.exit(1)
+    else:
+        print("No year directories found.")
+        sys.exit(1)
+else:
+    if len(sys.argv) != 3:
+        print("Usage: python main.py <year> <day>")
+        sys.exit(1)
+    year = sys.argv[1]
+    day = sys.argv[2]
 
-year = sys.argv[1]
-day = sys.argv[2]
 module_name = f"{year}.day_{day}.day{day}"
 
 try:
