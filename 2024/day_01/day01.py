@@ -1,9 +1,8 @@
 from utils.aoc import *
 
-left, right, rightC = [], [], {}
-
 def parse_data(input_data):
     data = input_as_lines(input_data)
+    left, right, rightC = [], [], {}
     
     for line in data:
         l = int(line[:len(line)//2])
@@ -21,7 +20,7 @@ def parse_data(input_data):
     
 
 def solve_part_one(input_data):
-    parse_data(input_data)
+    left, right, _ = parse_data(input_data)
     sum = 0
         
     left.sort()
@@ -34,6 +33,7 @@ def solve_part_one(input_data):
 
 
 def solve_part_two(input_data):
+    left, right, rightC = parse_data(input_data)
     sum = 0       
         
     for num in left:
