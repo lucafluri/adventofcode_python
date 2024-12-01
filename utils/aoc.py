@@ -1,4 +1,6 @@
-import collections, math, re
+import re
+from math import *
+from collections import *
 import itertools as it
 from functools import *
 import bisect
@@ -90,13 +92,6 @@ def mul_inv(a, b):
     if x1 < 0: x1 += b0
     return x1
 
-def gcd(a, b):
-    while b:
-        a, b = b, a % b
-    return a
-
-def lcm(a, b):
-    return a * b // gcd(a, b)
 
 def lcm_list(nums):
     return reduce(lcm, nums, 1)
@@ -113,7 +108,6 @@ def manhattan_distance(x1, y1, x2, y2):
 
 # Graphs
 '''
-from collections import deque
 queue = deque()
 queue.append((0, 0))
 visited = set()
