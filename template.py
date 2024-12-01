@@ -1,5 +1,7 @@
 from utils.aoc import *
 
+def parse_input(input_data):
+    return None
 
 def solve_part_one(input_data):
     return None
