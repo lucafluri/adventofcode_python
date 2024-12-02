@@ -6,22 +6,14 @@ def parse_input(input_data):
     data = [[int(x) for x in line] for line in data]
     return data
 
-def isValid(line):
-    steps = [1, 2, 3]
-    d = 1 if line[1] - line[0] > 0 else -1
-    for i in range(1, len(line)):
-        d0 = 1 if line[i] - line[i-1] > 0 else -1
-        if abs(line[i] - line[i-1]) not in steps or d0 != d:
-                return False
-    return True
-
-def isValid2(line):
+def isValid(line, part1=True):
     steps = [1, 2, 3]
     d = 1 if line[1] - line[0] > 0 else -1
     wrongCount = 0
     for i in range(1, len(line)):
         d0 = 1 if line[i] - line[i-1] > 0 else -1
         if abs(line[i] - line[i-1]) not in steps or d0 != d:
+            if(part1): return False
             wrongCount += 1
             if wrongCount > 1:
                 return False
@@ -30,14 +22,12 @@ def isValid2(line):
 def solve_part_one(input_data):
     data = parse_input(input_data)
     valid = list(map(isValid, data))
-    # print(valid)
     return sum(valid)
 
 
 def solve_part_two(input_data):
     data = parse_input(input_data)
-    valid = list(map(isValid2, data))
-    # print(valid)
+    valid = [isValid(line, False) for line in data]
     return sum(valid)
 
 def run():
