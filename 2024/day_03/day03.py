@@ -1,5 +1,9 @@
 from utils.aoc import *
 
+# Define the expected outputs for part one and part two
+expected_output_part_one = 161 
+expected_output_part_two = 48 
+
 def solve_part_one(input_data):
     matches = re.findall(r'mul\((\d+),(\d+)\)', input_data)
     return sum(int(a)*int(b) for a, b in matches)
@@ -22,7 +26,7 @@ def solve_part_two(input_data):
 
 def run():
     # Use puzzle runner to test with example data
-    test_with_example(2024, 3, solve_part_one, solve_part_two)
+    test_with_example(2024, 3, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
 
     # Use puzzle runner to submit solutions
     submit_solutions(2024, 3, solve_part_one, solve_part_two)
