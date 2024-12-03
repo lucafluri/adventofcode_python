@@ -21,7 +21,7 @@ def download_and_store_data(year, day, base_dir):
         with open(example_file, 'w') as f:
             f.write(puzzle.examples[0].input_data)
 
-    print("Data stored locally.")
+    # print("Data stored locally.")
 
 def get_input_data(base_dir):
     """
