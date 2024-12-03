@@ -29,23 +29,28 @@ def test_with_example(year, day, solve_part_one, solve_part_two):
     start_time = time.perf_counter_ns()
     example_part_one_result = solve_part_one(example_data)
     example_part_one_time = (time.perf_counter_ns() - start_time) / 1e9
-    if example_part_one_result == int(puzzle.examples[0].answer_a):
+    try:
+        expected_answer_a = int(puzzle.examples[0].answer_a)
+    except ValueError:
+        expected_answer_a = None
+    if example_part_one_result == expected_answer_a:
         print(f"\033[1;92mPart One Example Test Passed!: {example_part_one_result}\033[0m")
     else:
-        print(f"\033[1;91mPart One Example Test Failed: Expected {puzzle.examples[0].answer_a}, Got {example_part_one_result}\033[0m")
+        print(f"\033[1;91mPart One Example Test Failed: Expected {expected_answer_a}, Got {example_part_one_result}\033[0m")
     print(f"Part One Example Time: {example_part_one_time:.9f} seconds")
 
     # Test part two with timing
-    # if puzzle.examples[0].answer_b is None:  # Skip if there is no part two
-    #     return
     start_time = time.perf_counter_ns()
     example_part_two_result = solve_part_two(example_data)
     example_part_two_time = (time.perf_counter_ns() - start_time) / 1e9
-    
-    if example_part_two_result == int(puzzle.examples[0].answer_b) if puzzle.examples[0].answer_b != None  else 0:
+    try:
+        expected_answer_b = int(puzzle.examples[0].answer_b) if puzzle.examples[0].answer_b is not None else None
+    except ValueError:
+        expected_answer_b = None
+    if example_part_two_result == expected_answer_b:
         print(f"\033[1;92mPart Two Example Test Passed!: {example_part_two_result}\033[0m")
     else:
-        print(f"\033[1;91mPart Two Example Test Failed: Expected {puzzle.examples[0].answer_b}, Got {example_part_two_result}\033[0m")
+        print(f"\033[1;91mPart Two Example Test Failed: Expected {expected_answer_b}, Got {example_part_two_result}\033[0m")
     print(f"Part Two Example Time: {example_part_two_time:.9f} seconds")
 
 
@@ -156,7 +161,11 @@ def run_day_solutions(year, day):
     part_one_example_result = solve_part_one(example_data)
     part_one_input_result = solve_part_one(input_data)
     part_one_time = (time.perf_counter_ns() - start_time) / 1e9
-    part_one_correct_example = part_one_example_result == int(puzzle.examples[0].answer_a)
+    try:
+        expected_answer_a = int(puzzle.examples[0].answer_a)
+    except ValueError:
+        expected_answer_a = None
+    part_one_correct_example = part_one_example_result == expected_answer_a
     try:
         part_one_correct_input = part_one_input_result == int(puzzle.answer_a)
     except AttributeError:
@@ -167,7 +176,11 @@ def run_day_solutions(year, day):
     part_two_example_result = solve_part_two(example_data)
     part_two_input_result = solve_part_two(input_data)
     part_two_time = (time.perf_counter_ns() - start_time) / 1e9
-    part_two_correct_example = part_two_example_result == int(puzzle.examples[0].answer_b) if puzzle.examples[0].answer_b is not None else False
+    try:
+        expected_answer_b = int(puzzle.examples[0].answer_b) if puzzle.examples[0].answer_b is not None else None
+    except ValueError:
+        expected_answer_b = None
+    part_two_correct_example = part_two_example_result == expected_answer_b
     try:
         part_two_correct_input = part_two_input_result == int(puzzle.answer_b)
     except AttributeError:
