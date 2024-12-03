@@ -1,5 +1,8 @@
 from utils.aoc import *
 
+# Define the expected outputs for part one and part two
+expected_output_part_one = None
+expected_output_part_two = None
 
 setOfIDs = {0}
 
