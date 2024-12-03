@@ -3,7 +3,7 @@ from aocd.models import Puzzle
 import os
 import time
 import importlib
-from input_manager import get_input_data
+from input_manager import get_input_data, download_and_store_data
 
 
 def test_with_example(year, day, solve_part_one, solve_part_two, expected_output_part_one=None, expected_output_part_two=None):
@@ -20,13 +20,14 @@ def test_with_example(year, day, solve_part_one, solve_part_two, expected_output
     """
     print(f"Year: {year}, Day: {day}")
     # Fetch the puzzle for the specified day
-    puzzle = Puzzle(year=year, day=day)
-    # Determine base directory for inputs
+    base_dir = os.path.join(os.path.dirname(__file__), str(year), f'day_{day:02}')
+    download_and_store_data(year, day, base_dir)
 
     # Read example data
-    example_data = get_input_data(os.path.join(os.path.dirname(__file__), str(year), f'day_{day:02}'))[0]
+    example_data, input_data = get_input_data(base_dir)
 
     # Use provided expected outputs if available
+    puzzle = Puzzle(year=year, day=day)
     expected_answer_a = expected_output_part_one if expected_output_part_one is not None else int(puzzle.examples[0].answer_a)
     expected_answer_b = expected_output_part_two if expected_output_part_two is not None else (int(puzzle.examples[0].answer_b) if puzzle.examples[0].answer_b is not None else None)
 
@@ -64,11 +65,10 @@ def submit_solutions(year, day, solve_part_one, solve_part_two):
     print("\033[90mSubmitting solutions...\n=======================\033[0m")
     # Determine base directory for inputs
     base_dir = os.path.join(os.path.dirname(__file__), str(year), f'day_{day:02}')
+    download_and_store_data(year, day, base_dir)
 
     # Read input data
-    input_file = os.path.join(base_dir, "inputs", "input.txt")
-    with open(input_file, 'r') as f:
-        input_data = f.read()
+    example_data, input_data = get_input_data(base_dir)
 
     # Solve part one with timing
     start_time = time.perf_counter_ns()
@@ -127,11 +127,10 @@ def run_day_solutions(year, day):
 
     # Determine base directory for inputs
     base_dir = os.path.join(os.path.dirname(__file__), str(year), f'day_{day:02}')
+    download_and_store_data(year, day, base_dir)
 
     # Read example data from example.txt
-    example_file = os.path.join(base_dir, "inputs", "example.txt")
-    with open(example_file, 'r') as f:
-        example_data = f.read()
+    example_data, input_data = get_input_data(base_dir)
 
     # Attempt to import the module dynamically
     module_name = f'{year}.day_{day:02}.day{day:02}'
@@ -153,11 +152,6 @@ def run_day_solutions(year, day):
     # Retrieve optional expected outputs from the module
     expected_output_part_one = getattr(module, 'expected_output_part_one', None)
     expected_output_part_two = getattr(module, 'expected_output_part_two', None)
-
-    # Read input data
-    input_file = os.path.join(base_dir, "inputs", "input.txt")
-    with open(input_file, 'r') as f:
-        input_data = f.read()
 
     # Solve part one with timing and correctness
     start_time = time.perf_counter_ns()

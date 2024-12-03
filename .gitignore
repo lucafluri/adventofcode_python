@@ -8,6 +8,9 @@ __pycache__/
 # Ignore environment variables and secrets
 .env
 
+# Ignore input files
+day_*/inputs/*.txt
+
 # Ignore other temporary files
 *.tmp
 *.log
