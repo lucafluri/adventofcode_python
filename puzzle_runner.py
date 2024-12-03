@@ -34,7 +34,7 @@ def test_with_example(year, day, solve_part_one, solve_part_two, expected_output
     start_time = time.perf_counter_ns()
     example_part_one_result = solve_part_one(example_data)
     example_part_one_time = (time.perf_counter_ns() - start_time) / 1e9
-    if example_part_one_result == expected_answer_a:
+    if example_part_one_result is not None and example_part_one_result == expected_answer_a:
         print(f"\033[1;92mPart One Example Test Passed!: {example_part_one_result}\033[0m")
     else:
         print(f"\033[1;91mPart One Example Test Failed: Expected {expected_answer_a}, Got {example_part_one_result}\033[0m")
@@ -44,7 +44,7 @@ def test_with_example(year, day, solve_part_one, solve_part_two, expected_output
     start_time = time.perf_counter_ns()
     example_part_two_result = solve_part_two(example_data)
     example_part_two_time = (time.perf_counter_ns() - start_time) / 1e9
-    if example_part_two_result == expected_answer_b:
+    if example_part_two_result is not None and example_part_two_result == expected_answer_b:
         print(f"\033[1;92mPart Two Example Test Passed!: {example_part_two_result}\033[0m")
     else:
         print(f"\033[1;91mPart Two Example Test Failed: Expected {expected_answer_b}, Got {example_part_two_result}\033[0m")
