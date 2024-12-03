@@ -9,7 +9,7 @@ __pycache__/
 .env
 
 # Ignore input files
-day_*/inputs/*.txt
+*/day_*/inputs/*.txt
 
 # Ignore other temporary files
 *.tmp
