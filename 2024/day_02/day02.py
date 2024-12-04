@@ -11,26 +11,17 @@ def parse_input(input_data):
     return data
 
 def isValid(line):
-    d = 1 if line[1] - line[0] > 0 else -1
-    for i in range(1, len(line)):
-        d0 = 1 if line[i] - line[i-1] > 0 else -1
-        step = abs(line[i] - line[i-1])
-        if(step < 1 or step > 3) or d0 != d:
-            return False
-    return True
+    d = (line[1] > line[0]) - (line[1] < line[0])
+    return all(1 <= abs(line[i] - line[i-1]) <= 3 and 
+            (line[i] > line[i-1]) - (line[i] < line[i-1]) == d 
+            for i in range(1, len(line)))
 
 def remove_and_test(line):
-    for i in range(len(line)):
-        if isValid(line[:i] + line[i+1:]):
-            return True
-    return False
-
-
+    return any(isValid(line[:i] + line[i+1:]) for i in range(len(line)))
 
 def solve_part_one(input_data):
     data = parse_input(input_data)
     return sum(map(isValid, data))
-
 
 def solve_part_two(input_data):
     data = parse_input(input_data)
