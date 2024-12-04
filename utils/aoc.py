@@ -42,6 +42,46 @@ def input_as_grid(string) -> list:
     return list(list(line) for line in input_as_lines(string))
 
 
+# From lines of equal length strings, 
+# return strings of all diagonals of all lengths 
+# from the top left to the bottom right and
+# from the bottom left to the top right
+def get_diagonals(lines):
+    diagonals = []
+
+    # Get top-left to bottom-right diagonals
+    for d in range(len(lines) + len(lines[0]) - 1):
+        diagonal = []
+        for i in range(len(lines)):
+            j = d - i
+            if 0 <= j < len(lines[0]):
+                diagonal.append(lines[i][j])
+        if diagonal:
+            diagonals.append(''.join(diagonal))
+    
+    # Get bottom-left to top-right diagonals
+    for d in range(len(lines) + len(lines[0]) - 1):
+        diagonal = []
+        for i in range(len(lines)):
+            j = i - d + len(lines[0]) - 1
+            if 0 <= j < len(lines[0]):
+                diagonal.append(lines[i][j])
+        if diagonal:
+            diagonals.append(''.join(diagonal))
+    
+    return diagonals
+
+# from a list of strings return all columns as strings
+def get_columns(lines):
+    columns = []
+    for i in range(len(lines[0])):
+        column = []
+        for line in lines:
+            column.append(line[i])
+        columns.append(''.join(column))
+    return columns
+
+
 #Functional Utils
 def quantify(iterable, pred=bool) -> int:
     """Count number of items in iterable for which pred is true"""
