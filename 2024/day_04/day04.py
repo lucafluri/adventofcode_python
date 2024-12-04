@@ -6,8 +6,8 @@ expected_output_part_two = 9
 
 def parse_input(input_data):
     rows = input_as_lines(input_data)
-    cols = get_columns(rows)
-    diags = get_diagonals(rows)
+    cols = get_columns_from_lines(rows)
+    diags = get_diagonals_from_lines(rows)
     return rows, cols, diags
 
 def is_XMAS(x, y, grid):

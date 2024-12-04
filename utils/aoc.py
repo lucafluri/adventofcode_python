@@ -42,11 +42,15 @@ def input_as_grid(string) -> list:
     return list(list(line) for line in input_as_lines(string))
 
 
-# From lines of equal length strings, 
-# return strings of all diagonals of all lengths 
-# from the top left to the bottom right and
-# from the bottom left to the top right
-def get_diagonals(lines):
+
+def get_diagonals_from_lines(lines):
+    """
+    Input: List of strings
+    
+    Returns all diagonals from top-left to bottom-right and bottom-left to top-right
+    
+    Output: List of strings
+    """
     diagonals = []
 
     # Get top-left to bottom-right diagonals
@@ -71,8 +75,14 @@ def get_diagonals(lines):
     
     return diagonals
 
-# from a list of strings return all columns as strings
-def get_columns(lines):
+def get_columns_from_lines(lines):
+    """
+    Input: List of strings
+    
+    Returns all columns
+    
+    Output: List of strings
+    """
     columns = []
     for i in range(len(lines[0])):
         column = []
