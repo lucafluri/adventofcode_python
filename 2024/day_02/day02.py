@@ -29,18 +29,13 @@ def remove_and_test(line):
 
 def solve_part_one(input_data):
     data = parse_input(input_data)
-    valid = list(map(isValid, data))
-    return sum(valid)
+    return sum(map(isValid, data))
 
 
 def solve_part_two(input_data):
     data = parse_input(input_data)
     valid = [isValid(line) for line in data]
-    
-    for index, line in enumerate(data):
-        if not valid[index] and remove_and_test(line):
-            valid[index] = True
-    return sum(valid)
+    return sum([v or remove_and_test(line) for v, line in zip(valid, data)])
 
 def run():
     # Use puzzle runner to test with example data
