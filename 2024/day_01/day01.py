@@ -25,25 +25,14 @@ def parse_data(input_data):
 
 def solve_part_one(input_data):
     left, right, _ = parse_data(input_data)
-    sum = 0
-        
     left.sort()
     right.sort()
-    
-    for i in range(len(left)):
-        sum += abs(left[i] - right[i])
-    
-    return sum
+    return sum(abs(l - r) for l, r in zip(left, right))
 
 
 def solve_part_two(input_data):
     left, right, rightC = parse_data(input_data)
-    sum = 0       
-        
-    for num in left:
-        if num in rightC:
-            sum += rightC[num]*num
-    return sum
+    return sum(num * rightC[num] for num in left if num in rightC)
 
 
 def run():
