@@ -4,12 +4,6 @@ from utils.aoc import *
 expected_output_part_one = None
 expected_output_part_two = 4  
 
-def parse_input(input_data):
-    data = input_as_lines(input_data)
-    data = [line.split(' ') for line in data]
-    data = [[int(x) for x in line] for line in data]
-    return data
-
 def isValid(line):
     d = (line[1] > line[0]) - (line[1] < line[0])
     return all(1 <= abs(line[i] - line[i-1]) <= 3 and 
@@ -20,11 +14,11 @@ def remove_and_test(line):
     return any(isValid(line[:i] + line[i+1:]) for i in range(len(line)))
 
 def solve_part_one(input_data):
-    data = parse_input(input_data)
+    data = [ints(line) for line in input_as_lines(input_data)]
     return sum(map(isValid, data))
 
 def solve_part_two(input_data):
-    data = parse_input(input_data)
+    data = [ints(line) for line in input_as_lines(input_data)]
     valid = [isValid(line) for line in data]
     return sum([v or remove_and_test(line) for v, line in zip(valid, data)])
 

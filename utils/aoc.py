@@ -1,11 +1,17 @@
+import sys
 import re
 from math import *
 from collections import *
 import itertools as it
 from functools import *
 import bisect
+import heapq
+import copy
+from pprint import pprint
 from input_manager import download_and_store_data
 from puzzle_runner import test_with_example, submit_solutions
+
+sys.setrecursionlimit(100000)
 
 # Common Utils
 
@@ -41,58 +47,47 @@ def input_as_grid(string) -> list:
     """Return input as 2D grid"""
     return list(list(line) for line in input_as_lines(string))
 
-
-
 def get_diagonals_from_lines(lines):
-    """
-    Input: List of strings
-    
-    Returns all diagonals from top-left to bottom-right and bottom-left to top-right
-    
-    Output: List of strings
-    """
+    """Returns diagonals from top-left to bottom-right and bottom-left to top-right directions."""
     diagonals = []
-
-    # Get top-left to bottom-right diagonals
-    for d in range(len(lines) + len(lines[0]) - 1):
-        diagonal = []
-        for i in range(len(lines)):
-            j = d - i
-            if 0 <= j < len(lines[0]):
-                diagonal.append(lines[i][j])
-        if diagonal:
-            diagonals.append(''.join(diagonal))
-    
-    # Get bottom-left to top-right diagonals
-    for d in range(len(lines) + len(lines[0]) - 1):
-        diagonal = []
-        for i in range(len(lines)):
-            j = i - d + len(lines[0]) - 1
-            if 0 <= j < len(lines[0]):
-                diagonal.append(lines[i][j])
-        if diagonal:
-            diagonals.append(''.join(diagonal))
-    
+    num_rows, num_cols = len(lines), len(lines[0])
+    for d in range(num_rows + num_cols - 1):
+        diagonals.append(''.join(lines[i][d - i] for i in range(num_rows) if 0 <= d - i < num_cols))
+        diagonals.append(''.join(lines[i][i - d + num_cols - 1] for i in range(num_rows) if 0 <= i - d + num_cols - 1 < num_cols))
     return diagonals
 
 def get_columns_from_lines(lines):
-    """
-    Input: List of strings
-    
-    Returns all columns
-    
-    Output: List of strings
-    """
-    columns = []
-    for i in range(len(lines[0])):
-        column = []
-        for line in lines:
-            column.append(line[i])
-        columns.append(''.join(column))
-    return columns
+    """Return all columns from list of strings as list of strings."""
+    return [''.join(line[i] for line in lines) for i in range(len(lines[0]))]
 
+def lmap(func, *iterables) -> list:
+    """Applies a function to all items in the provided iterables and returns a list."""
+    return list(map(func, *iterables))
 
-#Functional Utils
+def ints(s: str) -> list:
+    """Extracts a list of integers from a string."""
+    return lmap(int, re.findall(r"-?\d+", s)) 
+
+def positive_ints(s: str) -> list:
+    """Extracts a list of positive integers from a string."""
+    return lmap(int, re.findall(r"\d+", s))
+
+def floats(s: str) -> list:
+    """Extracts a list of floats, including negative, from a string."""
+    return lmap(float, re.findall(r"-?\d+(?:\.\d+)?", s))
+
+def positive_floats(s: str) -> list:
+    """Extracts a list of positive floats from a string."""
+    return lmap(float, re.findall(r"\d+(?:\.\d+)?", s))
+
+def words(s: str) -> list:
+    """Extracts a list of words (alphabetic strings) from a string."""
+    return re.findall(r"[a-zA-Z]+", s)
+
+def flatten(l):
+    """Flattens a list of lists into a single list."""
+    return [i for x in l for i in x]
+
 def quantify(iterable, pred=bool) -> int:
     """Count number of items in iterable for which pred is true"""
     return sum(map(pred, iterable))
@@ -153,8 +148,18 @@ def manhattan_distance(x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
 
 
+#TODO
+# Binary Search, Bisect, Union Find, Segment Tree, Sliding Window, Range 
+
+
 
 # Useful Code
+'''
+# Two pointer (left and right end) iteration
+for i in range(len(nums)//2):
+    print(i) # 0,1,2
+    print(~i) # -1 (i.e. 4), -2 (i.e. 3), -3(i.e. 2)
+'''
 
 # Graphs
 '''
@@ -182,6 +187,38 @@ def dfs(graph, start):
             stack.extend(graph[vertex] - visited)
     return visited
 '''
+
+
+'''
+# Example code for Dijkstra's algorithm with priority queue
+import heapq
+
+def dijkstra(graph, start):
+    """Finds the shortest paths from the start vertex to all other vertices in a graph."""
+    queue = [(0, start)]
+    distances = {vertex: float('infinity') for vertex in graph}
+    distances[start] = 0
+    while queue:
+        current_distance, current_vertex = heapq.heappop(queue)
+        if current_distance > distances[current_vertex]:
+            continue
+        for neighbor, weight in graph[current_vertex].items():
+            distance = current_distance + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(queue, (distance, neighbor))
+    return distances
+
+# Example usage with a simple graph
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'A': 1, 'C': 2, 'D': 5},
+    'C': {'A': 4, 'B': 2, 'D': 1},
+    'D': {'B': 5, 'C': 1}
+}
+print(dijkstra(graph, 'A'))
+'''
+
 
 '''
 # General Karger Alorithm to find minimum cut in a graph

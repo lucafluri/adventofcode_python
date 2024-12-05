@@ -6,17 +6,16 @@ expected_output_part_two = None
 
 def parse_orderings(l):
     orderDict = {}
-    for l, r in (line.split('|') for line in l):
-        if int(l) not in orderDict:
-            orderDict[int(l)] = []
-        orderDict[int(l)].append(int(r))
+    for l, r in (ints(line) for line in l):
+        if l not in orderDict:
+            orderDict[l] = []
+        orderDict[l].append(r)
     return orderDict
 
 def parse_input(input_data):
     o, l = input_data.split('\n\n')
     orderDict = parse_orderings(input_as_lines(o))
-    lines = [line.split(',') for line in input_as_lines(l)]
-    lines = [[int(x) for x in line] for line in lines]
+    lines = [ints(line) for line in input_as_lines(l)]
     return orderDict, lines
 
 def is_valid(line, orderDict):
