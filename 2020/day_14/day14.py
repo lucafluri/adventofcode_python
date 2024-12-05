@@ -16,6 +16,20 @@ def mask_to_binary(mask):
             bin_zero &= ~(1 << (35 - i))
     return bin_one, bin_zero
 
+
+# Return all pssible masks by replacing only the X with either 0 or 1
+def all_floating_masks(mask):    
+    #mask = 0000000000000000000000000000000X00X0
+    all_masks = []
+    print(2**mask.count('X'))
+    for i in range(2**mask.count('X')):
+        mask1 = mask
+        for j in range(mask.count('X')):
+            mask1 = mask1[:j] + str((i >> j) & 1) + mask1[j+1:]
+        all_masks.append(mask_to_binary(mask1))
+    return all_masks
+
+
 def solve_part_one(input_data):
     data = input_as_lines(input_data)
     mask1, mask0 = (0, 0)
@@ -32,12 +46,26 @@ def solve_part_one(input_data):
 
 
 def solve_part_two(input_data):
-    return None
+    data = input_as_lines(input_data)
+    all_masks = []
+    
+    mem = {}
+    
+    for line in data:
+        if line.startswith('mask'):
+            all_masks = all_floating_masks(line.split(' = ')[1])
+            print(all_masks)
+        else:
+            match = re.match(r'mem\[(\d+)\] = (\d+)', line)
+            for mask1, mask0 in all_masks:
+                mem[(int(match.group(1)) & mask0) | mask1] = int(match.group(2))
+    
+    return sum(mem.values())
 
 def run():
     # Use puzzle runner to test with example data
     test_with_example(2020, 14, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
 
     # Use puzzle runner to submit solutions
-    submit_solutions(2020, 14, solve_part_one, solve_part_two)
+    # submit_solutions(2020, 14, solve_part_one, solve_part_two)
 
