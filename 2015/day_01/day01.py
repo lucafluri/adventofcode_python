@@ -11,7 +11,6 @@ def solve_part_one(input_data):
 
 def solve_part_two(input_data):
     floor = 0
-    floor = 0
     for i, c in enumerate(input_data, 1):
         floor += 1 if c == '(' else -1
         if floor == -1:

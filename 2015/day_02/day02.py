@@ -4,9 +4,6 @@ from utils.aoc import *
 expected_output_part_one = None 
 expected_output_part_two = None  
 
-def parse_input(input_data):
-    return None
-
 def solve_part_one(input_data):
     total = 0
     for line in input_as_lines(input_data):
