@@ -27,20 +27,14 @@ def is_valid(line, orderDict):
         seen.add(x)
     return True
 
-def correct_order(line, orderDict):
-    for i in range(len(line)-1, -1, -1):
-        for j in range(i-1, -1, -1):
-            if(line[i] in orderDict and line[j] in orderDict[line[i]]):
-                line[i], line[j] = line[j], line[i]
-    return line
-  
 def solve_part_one(input_data):
     orderDict, lines = parse_input(input_data)
     return sum(line[len(line)//2] for line in lines if is_valid(line, orderDict))
 
 def solve_part_two(input_data):
     orderDict, lines = parse_input(input_data)
-    return sum(correct_order(line, orderDict)[len(line)//2] for line in lines if not is_valid(line, orderDict))
+    cmp = cmp_to_key(lambda a, b: -1 if a in orderDict and b in orderDict[a] else 1 if b in orderDict and a in orderDict[b] else 0)
+    return sum(sorted(line, key=cmp)[len(line)//2] for line in lines if not is_valid(line, orderDict))
 
 def run():
     # Use puzzle runner to test with example data
