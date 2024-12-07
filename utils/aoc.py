@@ -98,7 +98,14 @@ def first(iterable, default=None) -> object:
 
 def product(iterable) -> int:
     """Return product of items in iterable"""
-    return math.prod(iterable)
+    return prod(iterable)
+
+def combinations(iterable, r):
+    """Return combinations as string of r items from iterable"""
+    combinations = []
+    for c in it.product(iterable, repeat=r):
+        combinations.append(''.join(c))
+    return combinations
 
 
 # Math Utils
