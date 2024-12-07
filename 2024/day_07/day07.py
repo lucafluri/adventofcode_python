@@ -4,27 +4,34 @@ from utils.aoc import *
 expected_output_part_one = None 
 expected_output_part_two = None  
 
+ops_cache = {}
+
 def parse_input(input_data):
     return [(i[0], i[1:]) for i in map(ints, input_as_lines(input_data))]
 
 def ops(n, part2=False):
     combinations = []
+    if (n, part2) in ops_cache:
+        return ops_cache[(n, part2)]
     for c in it.product(['+', '*'] if not part2 else ['+', '*', '|'], repeat=n):
         combinations.append(''.join(c))
+    ops_cache[(n, part2)] = combinations
     return combinations
 
-def isValid(n, lasts, part2=False):
-    for op in ops(len(lasts) - 1, part2):
-        res = lasts[0]
-        for i, operation in enumerate(op, 1):
-            if operation == '*':
-                res *= lasts[i]
-            elif operation == '+':
-                res += lasts[i]
-            elif operation == '|':
-                res = int(f"{res}{lasts[i]}")
-        if res == n:
-            return True
+def isValid(n, lasts, part2=False, index=0, current_result=None):
+    if current_result is None:
+        current_result = lasts[0]
+
+    if index == len(lasts) - 1:
+        return current_result == n
+
+    if isValid(n, lasts, part2, index + 1, current_result * lasts[index + 1]):
+        return True
+    if isValid(n, lasts, part2, index + 1, current_result + lasts[index + 1]):
+        return True
+    if part2 and isValid(n, lasts, part2, index + 1, int(f"{current_result}{lasts[index + 1]}")):
+        return True
+
     return False
 
 def solve_part_one(input_data):
@@ -39,4 +46,3 @@ def run():
 
     # Use puzzle runner to submit solutions
     submit_solutions(2024, 7, solve_part_one, solve_part_two)
-
