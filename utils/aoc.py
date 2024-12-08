@@ -154,6 +154,9 @@ def gcd_list(nums):
 def manhattan_distance(x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
 
+def inside_grid(x, y, grid):
+    return 0 <= x < len(grid[0]) and 0 <= y < len(grid)
+
 
 #TODO
 # Binary Search, Bisect, Union Find, Segment Tree, Sliding Window, Range 
