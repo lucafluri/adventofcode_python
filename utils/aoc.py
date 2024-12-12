@@ -95,7 +95,7 @@ def first(iterable, default=None) -> object:
     """Return first item from iterable or default"""
     return next(iter(iterable), default)
 
-def product(iterable) -> int:
+def product(iterable) -> float:
     """Return product of items in iterable"""
     return prod(iterable)
 
