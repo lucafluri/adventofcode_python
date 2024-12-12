@@ -14,7 +14,6 @@ from puzzle_runner import test_with_example, submit_solutions
 sys.setrecursionlimit(100000)
 
 # Common Utils
-
 DIR4 = [(-1, 0), (1, 0), (0, -1), (0, 1)] # Left, Right, Up, Down
 DIR8 = [
     (-1, 0),  # West
