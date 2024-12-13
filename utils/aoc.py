@@ -143,6 +143,45 @@ def mul_inv(a, b):
     if x1 < 0: x1 += b0
     return x1
 
+def solve_equations(coefficients, constants):
+    """
+    Solves a system of linear equations using Cramer's Rule.
+    coefficients: List of coefficients for each equation
+    constants: List of constants for each equation
+    
+    Example:
+    >>> coefficients = [[1, 2], [3, 4]]
+    >>> constants = [5, 6]
+    For the system:
+    1x + 2y = 5
+    3x + 4y = 6
+    """
+    def determinant(matrix):
+        if len(matrix) == 2:
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+        det = 0
+        for c in range(len(matrix)):
+            sub_matrix = [row[:c] + row[c+1:] for row in (matrix[1:])]
+            det += ((-1)**c) * matrix[0][c] * determinant(sub_matrix)
+        return det
+
+    def replace_column(matrix, column, new_column):
+        return [row[:column] + [new_col] + row[column+1:] for row, new_col in zip(matrix, new_column)]
+
+    n = len(coefficients)
+    det_main = determinant(coefficients)
+
+    if det_main == 0:
+        raise ValueError("The system has no unique solution")
+
+    solutions = []
+    for i in range(n):
+        modified_matrix = replace_column(coefficients, i, constants)
+        det_modified = determinant(modified_matrix)
+        solutions.append(det_modified / det_main)
+
+    return solutions
+
 
 def lcm_list(nums):
     return reduce(lcm, nums, 1)

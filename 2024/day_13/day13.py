@@ -29,6 +29,8 @@ def solve(input_data, part2=False):
         # Solve equations using det(A_i)/det(A) => Cramers rule
         A = (t_x*b_y - t_y*b_x)/(a_x*b_y - a_y*b_x)
         B = (a_x*t_y - a_y*t_x)/(a_x*b_y - a_y*b_x)
+        
+        # A, B = solve_equations([[a_x, b_x], [a_y, b_y]], [t_x, t_y])
         C = 3*A+B
         
         # Check if A, B, C are integers, if so add to tokens
