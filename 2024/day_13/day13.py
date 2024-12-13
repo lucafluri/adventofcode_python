@@ -31,11 +31,10 @@ def solve(input_data, part2=False):
         B = (a_x*t_y - a_y*t_x)/(a_x*b_y - a_y*b_x)
         
         # A, B = solve_equations([[a_x, b_x], [a_y, b_y]], [t_x, t_y])
-        C = 3*A+B
         
         # Check if A, B, C are integers, if so add to tokens
-        if A % 1 == 0 and B % 1 == 0 and C % 1 == 0:
-            tokens += C
+        if A % 1 == 0 and B % 1 == 0:
+            tokens += 3*A+B
     
     return int(tokens)
 
