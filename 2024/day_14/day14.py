@@ -21,14 +21,38 @@ def new_pos(height, width, pos, vel, seconds):
 def safety_score(positions, height, width):
     quadrants = [0,0,0,0]
     for pos in positions:
-        if pos[0] == width // 2 or pos[1] == height//2:
+        x,y = pos
+        if x == width // 2 or y == height//2:
             continue
+
+        if x < width//2 and y < height//2:
+            quadrants[0] += 1
+        elif x < width//2 and y > height//2:
+            quadrants[1] += 1
+        elif x > width//2 and y < height//2:
+            quadrants[2] += 1
+        else: quadrants[3] += 1
+
+    return product(quadrants)
+
+        
 
 
 def solve_part_one(input_data):
     robots = parse_input(input_data)
     print(robots)
-    return None
+
+    positions = []
+    for r in robots:
+        pos, vel = r
+        positions.append(new_pos(103,101,pos,vel, 100 ))
+
+    
+
+
+
+
+    return safety_score(positions,103,101)
 
 
 def solve_part_two(input_data):
@@ -40,5 +64,5 @@ def run():
     test_with_example(2024, 14, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
 
     # Use puzzle runner to submit solutions
-    #submit_solutions(2024, 14, solve_part_one, solve_part_two)
+    submit_solutions(2024, 14, solve_part_one, solve_part_two)
 
