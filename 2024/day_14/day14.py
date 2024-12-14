@@ -12,6 +12,18 @@ def parse_input(input_data):
         robots.append(((px,py),(vx,vy)))
     return robots
 
+def new_pos(height, width, pos, vel, seconds):
+    nx = (pos[0] + (vel[0]*seconds)) % width
+    ny = (pos[1] + (vel[1]*seconds)) % height
+
+    return (nx, ny)
+
+def safety_score(positions, height, width):
+    quadrants = [0,0,0,0]
+    for pos in positions:
+        if pos[0] == width // 2 or pos[1] == height//2:
+            continue
+
 
 def solve_part_one(input_data):
     robots = parse_input(input_data)
