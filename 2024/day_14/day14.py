@@ -33,39 +33,42 @@ def safety_score(positions, height, width):
             quadrants[2] += 1
         else: quadrants[3] += 1
 
-    return product(quadrants)
+    return product(quadrants), quadrants
 
-def printAll(pos, height, width):
+def printAll(pos, height, width ,seconds):
+    print(f"Seconds: {seconds}")
     for y in range(height):
         for x in range(width):
-            if (x,y) in pos:
-                print('#', end='')
+            if (x,y) in pos: print('#', end='')
             else: print('.', end='')
         print()
 
-    print()
         
 
 
 def solve_part_one(input_data):
     robots = parse_input(input_data)
-    #print(robots)
-
     positions = []
     for r in robots:
         pos, vel = r
         positions.append(new_pos(103,101,pos,vel, 100 ))
-
-    printAll(positions, 103,101)
-
-
-
-    return safety_score(positions,103,101)
+    return safety_score(positions,103,101)[0]
 
 
 def solve_part_two(input_data):
+    robots = parse_input(input_data)
+    
+    for i in range(10000):
+        positions = []
+        for r in robots:
+            pos, vel = r
+            positions.append(new_pos(103,101,pos,vel, i ))
+        _, quadrants = safety_score(positions,103,101)
+        if(any(q > 220 for q in quadrants)):
+            # printAll(positions, 103,101, i)
+            return i
+            
     return None
-
 
 def run():
     # Use puzzle runner to test with example data
