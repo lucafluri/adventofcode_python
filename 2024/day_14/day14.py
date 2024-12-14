@@ -35,20 +35,28 @@ def safety_score(positions, height, width):
 
     return product(quadrants)
 
+def printAll(pos, height, width):
+    for y in range(height):
+        for x in range(width):
+            if (x,y) in pos:
+                print('#', end='')
+            else: print('.', end='')
+        print()
+
+    print()
         
 
 
 def solve_part_one(input_data):
     robots = parse_input(input_data)
-    print(robots)
+    #print(robots)
 
     positions = []
     for r in robots:
         pos, vel = r
         positions.append(new_pos(103,101,pos,vel, 100 ))
 
-    
-
+    printAll(positions, 103,101)
 
 
 
