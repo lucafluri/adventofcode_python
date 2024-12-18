@@ -6,9 +6,7 @@ expected_output_part_two = 117440
 
 def parse_input(input_data):
     allInts = ints(input_data)
-    regA = allInts[0]
-    regB = allInts[1]
-    regC = allInts[2]
+    regA, regB, regC = allInts[:3]
     program = allInts[3:]
     return regA, regB, regC, program
 
@@ -20,7 +18,7 @@ def combop(op, regs):
     if(op==6):
         return regs[2]
     if(op==7):
-        return None
+        return 0
     return op
 
 def run_prog(prog, regs):
@@ -90,12 +88,12 @@ def solve_part_two(input_data):
         
         output = run_prog(prog, [A, 0, 0])[1]
         print(A, output, firstProg)
-        if output == firstProg: return i
+        if output == firstProg: return A
     
 
 def run():
     # Use puzzle runner to test with example data
-    # test_with_example(2024, 17, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
+    test_with_example(2024, 17, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
 
     # Use puzzle runner to submit solutions
     submit_solutions(2024, 17, solve_part_one, solve_part_two)
