@@ -1,4 +1,3 @@
-import dis
 from utils.aoc import *
 
 # Define the expected example outputs for part one and part two
