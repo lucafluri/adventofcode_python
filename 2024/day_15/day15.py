@@ -67,9 +67,9 @@ def move_horizontal(grid, pos, move='>'):
     return grid, pos
 
 def move_vertical(grid, pos, move='v'):
-    x, y = pos
+    # x, y = pos
     
-    return None
+    return 0, 0
     
 
 def moveRobot(grid, pos, move='^', part2=False):
@@ -115,7 +115,7 @@ def solve_part_two(input_data):
                 startPos = (x, y)
     
     for move in moves:
-        grid, startPos = moveRobot(grid, pos=startPos, move=move, part2=True)
+        grid, startPos = moveRobot(grid, startPos, move, part2=True)
     # print_grid(grid)
 
     return get_score(grid)
