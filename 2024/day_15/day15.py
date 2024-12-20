@@ -1,3 +1,4 @@
+from tabnanny import check
 from utils.aoc import *
 
 # Define the expected example outputs for part one and part two
@@ -17,17 +18,6 @@ def parse_input(input_data, part2=False):
     grid = input_as_grid(grid)
  
     return grid, moves
-
-# def find_boxes(grid):
-#     boxes = []
-#     for y in range(len(grid)):
-#         for x in range(len(grid[0])):
-#             if grid[y][x] == 'O':
-#                 boxes.append((x, y))
-#             elif grid[y][x] == '[':
-#                 pass
-#     return boxes
-
 
 def get_delta(move='^'):
     if move == '^': return 0, -1
@@ -66,18 +56,66 @@ def move_horizontal(grid, pos, move='>'):
         grid[y-dy][x-dx] = '.'    
     return grid, pos
 
+def check_vertical(grid, pos, move='v'):    
+    x, y = pos
+    dx, dy = get_delta(move)
+    
+    # Check if next position is valid
+    next_y = y + dy
+    next_x = x + dx
+    
+    # Base cases
+    if not inside_grid(next_x, next_y, grid):
+        return False
+    if grid[next_y][next_x] == '#':
+        return False
+    if grid[next_y][next_x] == '.':
+        return True
+    
+    # Handle box cases
+    if grid[y][x] == '[':
+        # For a box, check both corners
+        return check_vertical(grid, (next_x, next_y), move) and check_vertical(grid, (next_x + 1, next_y), move)
+    else:
+        # For a regular position, check both possible paths
+        return check_vertical(grid, (next_x, next_y), move) and check_vertical(grid, (next_x - 1, next_y), move)
+
+def move_recursive(grid, pos, move='v'):
+    x, y = pos
+    dx, dy = get_delta(move)
+    
+    before_x = x-dx
+    before_y = y-dy    
+    next_y = y + dy
+    next_x = x + dx
+    # Base cases
+    if not inside_grid(before_x, before_y, grid) or inside_grid(next_x, next_y, grid):
+        return False
+    grid[x][y] = grid[before_y][before_x]
+    
+    # Handle box cases
+    if grid[y][x] == '[':
+        # For a box, check both corners
+        return move_recursive(grid, (next_x, next_y), move) and move_recursive(grid, (next_x + 1, next_y), move)
+    else:
+        # For a regular position, check both possible paths
+        return move_recursive(grid, (next_x, next_y), move) and move_recursive(grid, (next_x - 1, next_y), move)
+
+
+
 def move_vertical(grid, pos, move='v'):
-    # x, y = pos
+    if not check_vertical(grid, pos, move):
+        return grid, pos
     
-    return 0, 0
+    move_recursive(grid, pos, move)
     
+    return grid, pos
 
 def moveRobot(grid, pos, move='^', part2=False):
     if not part2: return move_horizontal(grid, pos, move)
     if move in '<>':
         return move_horizontal(grid, pos, move)
     return move_vertical(grid, pos, move)
-    
     
 def get_score(grid):
     score = 0
@@ -116,7 +154,9 @@ def solve_part_two(input_data):
     
     for move in moves:
         grid, startPos = moveRobot(grid, startPos, move, part2=True)
-    # print_grid(grid)
+        
+        
+    print_grid(grid)
 
     return get_score(grid)
 
@@ -127,4 +167,3 @@ def run():
 
     # Use puzzle runner to submit solutions
     # submit_solutions(2024, 15, solve_part_one, solve_part_two)
-

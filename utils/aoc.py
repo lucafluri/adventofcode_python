@@ -316,9 +316,9 @@ while 0 <= pc < len(prog):
 
 
 # Print Utils
-def print_grid(grid):
-    for line in grid:
-        print(''.join(line))
+def print_grid(grid, spacing=1):
+    for row in grid:
+        print(' '.join(f'{cell:>{spacing}}' for cell in row))
     print()
 
 def print_matrix(matrix):
