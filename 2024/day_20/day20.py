@@ -1,7 +1,3 @@
-import dis
-from itertools import count
-from os import path
-from turtle import st
 from utils.aoc import *
 
 # Define the expected example outputs for part one and part two
