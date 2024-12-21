@@ -318,6 +318,9 @@ while 0 <= pc < len(prog):
 # Print Utils
 def print_grid(grid, spacing=1):
     for row in grid:
+        if spacing == 0:
+            print(''.join(row))
+            continue
         print(' '.join(f'{cell:>{spacing}}' for cell in row))
     print()
 
