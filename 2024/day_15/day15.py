@@ -91,7 +91,7 @@ def move_recursive(grid, pos, move='v'):
     # Base cases
     if not inside_grid(before_x, before_y, grid) or not inside_grid(next_x, next_y, grid):
         # print('Out of bounds')
-        return False
+        return grid
     
     # print(len(grid), len(grid[0]))
     # print(x, y, before_x, before_y, next_x, next_y)
@@ -121,7 +121,8 @@ def move_vertical(grid, pos, move='v'):
     next_x = x + dx
     
     # move_recursive(grid, (next_x, next_y), move)
-    move_recursive(grid, pos, move)
+    grid = move_recursive(grid, pos, move)
+    pos = (next_x, next_y)
     
     return grid, pos
 
