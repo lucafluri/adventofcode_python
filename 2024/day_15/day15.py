@@ -89,9 +89,15 @@ def move_recursive(grid, pos, move='v'):
     next_y = y + dy
     next_x = x + dx
     # Base cases
-    if not inside_grid(before_x, before_y, grid) or inside_grid(next_x, next_y, grid):
+    if not inside_grid(before_x, before_y, grid) or not inside_grid(next_x, next_y, grid):
+        # print('Out of bounds')
         return False
-    grid[x][y] = grid[before_y][before_x]
+    
+    # print(len(grid), len(grid[0]))
+    # print(x, y, before_x, before_y, next_x, next_y)
+    grid[y][x] = grid[before_y][before_x]
+    
+    # print_grid(grid, 0)
     
     # Handle box cases
     if grid[y][x] == '[':
@@ -100,6 +106,7 @@ def move_recursive(grid, pos, move='v'):
     else:
         # For a regular position, check both possible paths
         return move_recursive(grid, (next_x, next_y), move) and move_recursive(grid, (next_x - 1, next_y), move)
+    return grid
 
 
 
@@ -107,6 +114,13 @@ def move_vertical(grid, pos, move='v'):
     if not check_vertical(grid, pos, move):
         return grid, pos
     
+    x, y = pos
+    dx, dy = get_delta(move)
+    
+    next_y = y + dy
+    next_x = x + dx
+    
+    # move_recursive(grid, (next_x, next_y), move)
     move_recursive(grid, pos, move)
     
     return grid, pos
@@ -144,7 +158,7 @@ def solve_part_one(input_data):
 
 def solve_part_two(input_data):
     grid, moves = parse_input(input_data, part2=True)
-    print_grid(grid)
+    print_grid(grid, 0)
     
     startPos = (0, 0)
     for y in range(len(grid)):
@@ -154,9 +168,11 @@ def solve_part_two(input_data):
     
     for move in moves:
         grid, startPos = moveRobot(grid, startPos, move, part2=True)
+        print('Move: ', move)
+        print_grid(grid, 0)
         
         
-    print_grid(grid)
+    print_grid(grid, 0)
 
     return get_score(grid)
 
