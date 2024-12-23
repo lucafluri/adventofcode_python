@@ -84,18 +84,18 @@ def move_recursive(grid, pos, move='v'):
     x, y = pos
     dx, dy = get_delta(move)
     
-    before_x = x-dx
-    before_y = y-dy    
+    # before_x = x-dx
+    # before_y = y-dy    
     next_y = y + dy
     next_x = x + dx
     # Base cases
-    if not inside_grid(before_x, before_y, grid) or not inside_grid(next_x, next_y, grid):
+    if not inside_grid(next_x, next_y, grid):
         # print('Out of bounds')
         return grid
     
     # print(len(grid), len(grid[0]))
     # print(x, y, before_x, before_y, next_x, next_y)
-    grid[y][x] = grid[before_y][before_x]
+    # grid[y][x] = grid[before_y][before_x]
     
     # print_grid(grid, 0)
     
@@ -103,9 +103,11 @@ def move_recursive(grid, pos, move='v'):
     if grid[y][x] == '[':
         # For a box, check both corners
         return move_recursive(grid, (next_x, next_y), move) and move_recursive(grid, (next_x + 1, next_y), move)
-    else:
+    elif grid[y][x] == ']':
         # For a regular position, check both possible paths
         return move_recursive(grid, (next_x, next_y), move) and move_recursive(grid, (next_x - 1, next_y), move)
+    else:
+        grid[y][x] = '.'
     return grid
 
 
@@ -121,8 +123,11 @@ def move_vertical(grid, pos, move='v'):
     next_x = x + dx
     
     # move_recursive(grid, (next_x, next_y), move)
-    grid = move_recursive(grid, pos, move)
-    pos = (next_x, next_y)
+    if grid[next_y][next_x] in '[]':
+        grid = move_recursive(grid, pos, move)
+    else:
+        return move_horizontal(grid, pos, move)
+    # pos = (next_x, next_y)
     
     return grid, pos
 
