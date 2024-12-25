@@ -28,14 +28,15 @@ def get_binary(listWires):
 def run_instructions(wires, ops):
     # wires, ops = parse_input(input_data)
     
-    while len(ops) > 0:
-        
+    while len(ops) > 0:        
         for l, op, r, res in ops:
             if l in wires and r in wires:
                 if(op == 'AND'): wires[res] = wires[l] & wires[r]
                 if(op == 'OR'): wires[res] = wires[l] | wires[r]
                 if(op == 'XOR'): wires[res] = wires[l] ^ wires[r]
                 ops.remove((l, op, r, res))
+            else:
+                return 0, 0
 
     sorted_wires = sorted(wires.items(), key=lambda x: x[0])
     z_wires = [wire for wire in sorted_wires if wire[0].startswith('z')]
@@ -53,8 +54,10 @@ def solve_part_one(input_data):
 def solve_part_two(input_data):
     wires, ops = parse_input(input_data)
     
-    #change input number
-    wires['x44'] = 0
+    print(generate_mermaid_chart(ops))
+    
+    # Change input number
+    # wires['x44'] = 0
     
     sorted_wires = sorted(wires.items(), key=lambda x: x[0])
     x_wires = [wire for wire in sorted_wires if wire[0].startswith('x')]
@@ -98,11 +101,12 @@ def solve_part_two(input_data):
         'qgd': 'z18',
         'jmh': 'hsw',
         'hsw': 'jmh',
-        }
+
+    }
     
-    solution = ",".join(sorted(replacements.keys()))
-    print(solution)
-    
+           # 'jmh': 'hsw',
+        # 'hsw': 'jmh',
+        
     for o in ops.copy():
         l, op, r, res = o
         # print(o)
@@ -113,39 +117,81 @@ def solve_part_two(input_data):
             ops.append(o)
         # print(o)
         
-    
-
-
-    
+    print("My Solve\n\n\n")
+    print(generate_mermaid_chart(ops))
     
     
+    all_wires = set()
+    for l, op, r, res in ops:
+        all_wires.update([l, r, res])
+    all_wires.difference_update(replacements.keys())
     
-    target_z = x_value + y_value
-    res, z_wires = run_instructions(wires, ops)
-    print(x_value, y_value, target_z, res)
-    print()
-    print(target_z == res)
-    # print("Column Numbers:")
-    print("".join(f"{i//10 if i >= 10 else '0'}" for i in range(48))[::-1])
-    print("".join(f"{i%10}" for i in range(48))[::-1])
-    print("".join(f"-" for i in range(48)))
+    combinations = it.combinations(all_wires, 2)
+    total_combinations = len(list(combinations))
+    # print(total_combinations)
+    combinations = it.combinations(all_wires, 2)  # Recreate generator
     
-    # print(bin(x_value)[2:][::-1].zfill(48))
-    # print(bin(y_value)[2:][::-1].zfill(48))
-    # # print(bin(target_z)[2:].zfill(48))
+    for index, c in enumerate(combinations, start=1):
+        wires2, ops2 = parse_input(input_data)
+        
+        # print(len(wires2))
+        # print(len(ops2))
+        # wires2 = copy.deepcopy(wires)
+        # ops2 = copy.deepcopy(ops)
+        reps = copy.deepcopy(replacements)
+        
+        # Print progress
+    # print(f"Processing combination {index} of {total_combinations}: {c}")
+        
+        reps[c[0]] = c[1]
+        reps[c[1]] = c[0]
+        
+        # print(f"Replacements: {reps}")
+        
+        # Apply replacements to operations
+        # for i, (l, op, r, res) in enumerate(ops2):
+        #     l = reps.get(l, l)
+        #     r = reps.get(r, r)
+        #     res = reps.get(res, res)
+        #     ops2[i] = (l, op, r, res)
+        
+        for o in ops2.copy():
+            l, op, r, res = o
+            # print(o)
+            if(res in reps):
+                res = reps[res]
+                ops2.remove(o)
+                o = (l, op, r, res)
+                ops2.append(o)
+            # print(o)
+            
+        solution = ",".join(sorted(reps.keys()))
+        # print(solution)
+        
+        target_z = x_value + y_value
+        res, _ = run_instructions(wires2, ops2)
+        
+        # print(x_value, y_value, target_z, res)
+        
+        if target_z == res:
+            print("Solution found!")
+            print(solution)
+            return solution
     
-    # print(bin(res)[2:][::-1].zfill(48))
-    # return run_instructions(wires, ops
+    # print(x_value, y_value, target_z, res)
+    # print()
+    # print(target_z == res)
+    # print("".join(f"{i//10 if i >= 10 else '0'}" for i in range(48))[::-1])
+    # print("".join(f"{i%10}" for i in range(48))[::-1])
+    # print("".join(f"-" for i in range(48)))
     
-    # Show x, y and res value in binary form, stacked over each other
-    # print("Binary Representation (LSB right, MSB left):")
-    length = 48
-    print(bin(x_value)[2:].zfill(length))
-    print(bin(y_value)[2:].zfill(length))
-    print(bin(res)[2:].zfill(length))
-    print()
-    print(bin(target_z)[2:].zfill(length))
-    print(bin(target_z ^ res)[2:].zfill(length))
+    # length = 48
+    # print(bin(x_value)[2:].zfill(length))
+    # print(bin(y_value)[2:].zfill(length))
+    # print(bin(res)[2:].zfill(length))
+    # print()
+    # print(bin(target_z)[2:].zfill(length))
+    # print(bin(target_z ^ res)[2:].zfill(length))
     
     
     
@@ -159,8 +205,32 @@ def solve_part_two(input_data):
     
     
     
-    return solution
+    return None
 
+def generate_mermaid_chart(ops):
+    """
+    Generates a Mermaid chart code from the list of operations as a linked tree graph.
+    Shows AND, OR, XOR as gates with source and destination as nodes.
+    Marks all 'z' wires in red.
+    """
+    mermaid_chart = ["graph TD;"]
+    for l, op, r, res in ops:
+        # Mark 'z' wires in red
+        l_style = ":::red" if l.startswith('z') else ""
+        r_style = ":::red" if r.startswith('z') else ""
+        res_style = ":::red" if res.startswith('z') else ""
+        # Create nodes and gates for each operation
+        gate_id = f"{l}_{op}_{r}"  # Unique ID for the gate
+        mermaid_chart.append(f"{l}{l_style} --> {gate_id}({op})")
+        mermaid_chart.append(f"{r}{r_style} --> {gate_id}({op})")
+        mermaid_chart.append(f"{gate_id} --> {res}{res_style}")
+    # Define the red style
+    mermaid_chart.append("classDef red fill:#f96;")
+    return "\n".join(mermaid_chart)
+
+# Example usage:
+# ops = [("x1", "AND", "y1", "z1"), ("x2", "OR", "y2", "z2")]
+# print(generate_mermaid_chart(ops))
 
 def run():
     # Use puzzle runner to test with example data
@@ -168,4 +238,3 @@ def run():
 
     # Use puzzle runner to submit solutions
     submit_solutions(2024, 24, solve_part_one, solve_part_two)
-
