@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 from input_manager import ROOT, day_dir, download_and_store_data
 
@@ -10,10 +11,7 @@ def generate_day(year, day):
 
     script = os.path.join(path, f"day{day:02}.py")
     if not os.path.exists(script):
-        with open(os.path.join(ROOT, "template.py")) as f:
-            content = f.read().replace("__YEAR__", str(year)).replace("__DAY__", str(day))
-        with open(script, "w") as f:
-            f.write(content)
+        shutil.copy(os.path.join(ROOT, "template.py"), script)
     print(f"Setup for {year} day {day} complete: {script}")
 
 

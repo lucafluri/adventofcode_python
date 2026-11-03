@@ -18,7 +18,3 @@ def solve_part_two(input_data):
     data = parse_input(input_data)
     return None
 
-
-def run():
-    test_with_example(__YEAR__, __DAY__, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-    submit_solutions(__YEAR__, __DAY__, solve_part_one, solve_part_two)

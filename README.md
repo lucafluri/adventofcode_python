@@ -26,8 +26,11 @@ Running a day:
 2. Runs both parts on the real input, then asks to submit unsolved parts (`None` results are skipped).
    Already-solved parts are just checked against your accepted answer.
 
+A day file only needs `solve_part_one`, `solve_part_two` and optionally `expected_output_part_one/two`.
+
 Inputs are cached in `YYYY/day_XX/inputs/` (gitignored). If aocd picks the wrong example,
-edit `example.txt` and set the expected outputs in the day file.
+edit `example.txt` and set the expected outputs in the day file. If part two uses a different
+example, put it in `example2.txt`.
 
 Note: from 2025 on, Advent of Code has 12 days instead of 25.
 
@@ -39,6 +42,6 @@ generate_day.py   # create a day from template.py
 run_all_days.py   # run a whole year
 puzzle_runner.py  # example testing, submitting, timing
 input_manager.py  # .env loading, input download/cache
-utils/aoc.py      # helpers imported by every day (`from utils.aoc import *`)
+utils/aoc.py      # helpers for every day: ints, grid_dict, find, neighbors, bfs, dijkstra, ...
 YYYY/day_XX/dayXX.py
 ```

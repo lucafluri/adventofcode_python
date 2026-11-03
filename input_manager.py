@@ -44,11 +44,13 @@ def download_and_store_data(year, day, base_dir=None):
 
 
 def get_input_data(base_dir):
-    """Return (example_data, input_data) from base_dir/inputs."""
+    """Return (example, example_part_two, input) from base_dir/inputs.
+    example2.txt is optional for when part two uses a different example."""
     def read(name):
         path = os.path.join(base_dir, "inputs", name)
         if not os.path.exists(path):
             return ""
         with open(path) as f:
             return f.read().rstrip("\n")
-    return read("example.txt"), read("input.txt")
+    example = read("example.txt")
+    return example, read("example2.txt") or example, read("input.txt")

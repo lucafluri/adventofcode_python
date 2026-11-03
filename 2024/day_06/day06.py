@@ -78,10 +78,3 @@ def solve_part_two(input_data):
         grid[y][x] = original_value
 
     return possible_positions
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2024, 6, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2024, 6, solve_part_one, solve_part_two)

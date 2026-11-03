@@ -26,11 +26,3 @@ def solve_part_two(input_data):
         l2 = match['pw'][match['max']-1]
         if (l1 == match['char'] and l2 != match['char']) or (l1 != match['char'] and l2 == match['char']): valid += 1
     return valid
-
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2020, 2, solve_part_one, solve_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2020, 2, solve_part_one, solve_part_two)

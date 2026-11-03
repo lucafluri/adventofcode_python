@@ -31,12 +31,3 @@ def solve_part_one(input_data):
 
 def solve_part_two(input_data):
     return num_contained('shiny gold', rules)
-
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2020, 7, solve_part_one, solve_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2020, 7, solve_part_one, solve_part_two)
-

@@ -58,10 +58,3 @@ def solve_part_two(input_data):
                 checksum += num * (i + offset)
         i += size
     return int(checksum)
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2024, 9, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2024, 9, solve_part_one, solve_part_two)

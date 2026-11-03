@@ -34,11 +34,3 @@ def solve_part_two(input_data):
     orderDict, lines = parse_input(input_data)
     cmp = cmp_to_key(lambda a, b: -1 if a in orderDict and b in orderDict[a] else 1 if b in orderDict and a in orderDict[b] else 0)
     return sum(sorted(line, key=cmp)[len(line)//2] for line in lines if not is_valid(line, orderDict))
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2024, 5, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2024, 5, solve_part_one, solve_part_two)
-

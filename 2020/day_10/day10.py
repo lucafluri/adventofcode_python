@@ -29,11 +29,3 @@ def solve_part_two(input_data):
         ways[adapter] = ways.get(adapter - 1, 0) + ways.get(adapter - 2, 0) + ways.get(adapter - 3, 0)
 
     return ways[data[-1]]
-
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2020, 10, solve_part_one, solve_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2020, 10, solve_part_one, solve_part_two)

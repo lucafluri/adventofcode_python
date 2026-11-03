@@ -24,10 +24,3 @@ def solve_part_two(input_data):
             common_chars &= set(person)
         count += len(common_chars)
     return count
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2020, 6, solve_part_one, solve_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2020, 6, solve_part_one, solve_part_two)

@@ -69,11 +69,3 @@ def solve_part_two(input_data):
             return i
             
     return None
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2024, 14, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2024, 14, solve_part_one, solve_part_two)
-

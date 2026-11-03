@@ -21,10 +21,3 @@ def solve_part_two(input_data):
     data = [ints(line) for line in input_as_lines(input_data)]
     valid = [isValid(line) for line in data]
     return sum([v or remove_and_test(line) for v, line in zip(valid, data)])
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2024, 2, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2024, 2, solve_part_one, solve_part_two)

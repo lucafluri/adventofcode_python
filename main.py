@@ -2,10 +2,10 @@ import argparse
 import glob
 import os
 from datetime import datetime
-from importlib import import_module
 from zoneinfo import ZoneInfo
 from input_manager import ROOT, max_day
 from generate_day import generate_day
+from puzzle_runner import run_day
 
 
 def default_year_day():
@@ -27,4 +27,4 @@ if __name__ == "__main__":
 
     if not os.path.exists(os.path.join(ROOT, str(year), f"day_{day:02}", f"day{day:02}.py")):
         generate_day(year, day)
-    import_module(f"{year}.day_{day:02}.day{day:02}").run()
+    run_day(year, day)

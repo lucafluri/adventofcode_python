@@ -168,10 +168,3 @@ def generate_mermaid_chart(ops):
 # Example usage:
 # ops = [("x1", "AND", "y1", "z1"), ("x2", "OR", "y2", "z2")]
 # print(generate_mermaid_chart(ops))
-
-def run():
-    # Use puzzle runner to test with example data
-    # test_with_example(2024, 24, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2024, 24, solve_part_one, solve_part_two)

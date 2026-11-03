@@ -90,10 +90,3 @@ def solve_part_two(input_data):
         print(A, output, firstProg)
         if output == firstProg: return A
     
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2024, 17, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2024, 17, solve_part_one, solve_part_two)

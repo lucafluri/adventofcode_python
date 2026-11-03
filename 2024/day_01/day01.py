@@ -33,12 +33,3 @@ def solve_part_one(input_data):
 def solve_part_two(input_data):
     left, right, rightC = parse_data(input_data)
     return sum(num * rightC[num] for num in left if num in rightC)
-
-
-def run():
-    # Use puzzle runner to test with example data
-    test_with_example(2024, 1, solve_part_one, solve_part_two, expected_output_part_one, expected_output_part_two)
-
-    # Use puzzle runner to submit solutions
-    submit_solutions(2024, 1, solve_part_one, solve_part_two)
-
