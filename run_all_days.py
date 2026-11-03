@@ -1,57 +1,29 @@
-import os
-import aocd
-from puzzle_runner import run_day_solutions
-from tabulate import tabulate
 import argparse
+from tabulate import tabulate
+from input_manager import day_dir, max_day
+from puzzle_runner import run_day_solutions, GREEN, YELLOW, RED, BOLD, RESET
+import os
+
+
+def colored(seconds, example_ok, input_ok):
+    color = GREEN if input_ok else YELLOW if example_ok else RED
+    return f"{color}{seconds:.4f}s{RESET}"
 
 
 def run_all_days(year):
-    """
-    Run all available days in the given year and display execution timings for all parts.
-
-    Args:
-        year (int): The year to run the solutions for.
-    """
-    year_directory = str(year)
-    results = []
-
-    # Iterate through all days from 1 to 25
-    for day_number in range(1, 26):
-        day_path = os.path.join(year_directory, f'day_{day_number:02}')
-        if os.path.isdir(day_path):
-            timings = run_day_solutions(year, day_number)
-            if timings:
-                (part_one_time, part_one_correct_example, part_one_correct_input), (part_two_time, part_two_correct_example, part_two_correct_input) = timings
-
-                # Determine color based on correctness
-                part_one_color = "\033[92m" if part_one_correct_example and part_one_correct_input else ("\033[93m" if part_one_correct_example else "\033[91m")
-                part_two_color = "\033[92m" if part_two_correct_example and part_two_correct_input else ("\033[93m" if part_two_correct_example else "\033[91m")
-
-                results.append([
-                    f"\033[1mDay {day_number:02}\033[0m",
-                    f"{part_one_color}{part_one_time:.5f} seconds\033[0m",
-                    f"{part_two_color}{part_two_time:.5f} seconds\033[0m",
-                    f"{part_one_color if part_one_correct_example and part_one_correct_input else part_two_color}{part_one_time + part_two_time:.4f} seconds\033[0m"
-                ])
-            else:
-                results.append([f"\033[1mDay {day_number:02}\033[0m", "N/A", "N/A", "N/A"])
+    """Green: real answer correct, yellow: only example correct, red: both wrong."""
+    rows = []
+    for day in range(1, max_day(year) + 1):
+        timings = run_day_solutions(year, day) if os.path.isdir(day_dir(year, day)) else None
+        if timings:
+            (t1, *ok1), (t2, *ok2) = timings
+            rows.append([f"Day {day:02}", colored(t1, *ok1), colored(t2, *ok2), f"{t1 + t2:.4f}s"])
         else:
-            results.append([f"\033[1mDay {day_number:02}\033[0m", "N/A", "N/A", "N/A"])
-
-    # Display the results in a table with bold headers
-    headers = ["\033[1mDay\033[0m", "\033[1mPart One Time\033[0m", "\033[1mPart Two Time\033[0m", "\033[1mTotal Time\033[0m"]
-    print(tabulate(results, headers=headers, tablefmt="grid"))
+            rows.append([f"Day {day:02}", "N/A", "N/A", "N/A"])
+    print(tabulate(rows, headers=[f"{BOLD}{h}{RESET}" for h in ("Day", "Part One", "Part Two", "Total")], tablefmt="grid"))
 
 
 if __name__ == "__main__":
-    # Manually read the .env file and set the AOC_SESSION variable
-    with open('.env') as f:
-        for line in f:
-            if line.startswith('AOC_SESSION'):
-                AOC_SESSION = line.strip().split('=')[1]
-                os.environ['AOC_SESSION'] = AOC_SESSION
-
-    parser = argparse.ArgumentParser(description="Run all available days in a given year and display execution timings.")
-    parser.add_argument("year", type=int, help="The year to run the solutions for.")
-    args = parser.parse_args()
-    run_all_days(args.year)
+    parser = argparse.ArgumentParser(description="Run all days of a year and show timings.")
+    parser.add_argument("year", type=int)
+    run_all_days(parser.parse_args().year)

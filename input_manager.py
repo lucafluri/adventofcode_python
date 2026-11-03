@@ -1,51 +1,54 @@
 import os
 from aocd.models import Puzzle
 
-def download_and_store_data(year, day, base_dir):
-    # Fetch the puzzle for the specified day
-    puzzle = Puzzle(year=year, day=day)
-    
-    # Define file paths
-    input_dir = os.path.join(base_dir, "inputs")
+ROOT = os.path.dirname(os.path.abspath(__file__))
+
+
+def load_env():
+    """Load AOC_SESSION from .env (optional; aocd also reads ~/.config/aocd/token)."""
+    path = os.path.join(ROOT, ".env")
+    if os.path.exists(path):
+        with open(path) as f:
+            for line in f:
+                key, _, value = line.strip().partition("=")
+                if key == "AOC_SESSION":
+                    os.environ["AOC_SESSION"] = value.strip().strip('"\'')
+
+
+load_env()
+
+
+def max_day(year):
+    return 12 if int(year) >= 2025 else 25
+
+
+def day_dir(year, day):
+    return os.path.join(ROOT, str(year), f"day_{int(day):02}")
+
+
+def download_and_store_data(year, day, base_dir=None):
+    input_dir = os.path.join(base_dir or day_dir(year, day), "inputs")
     os.makedirs(input_dir, exist_ok=True)
     input_file = os.path.join(input_dir, "input.txt")
     example_file = os.path.join(input_dir, "example.txt")
+    if os.path.exists(input_file) and os.path.exists(example_file):
+        return
 
-    # Check and store input data
+    puzzle = Puzzle(year=int(year), day=int(day))
     if not os.path.exists(input_file):
-        with open(input_file, 'w') as f:
+        with open(input_file, "w") as f:
             f.write(puzzle.input_data)
+    if not os.path.exists(example_file):
+        with open(example_file, "w") as f:
+            f.write(puzzle.examples[0].input_data if puzzle.examples else "")
 
-    # Check and store example data
-    if puzzle.examples and not os.path.exists(example_file):
-        with open(example_file, 'w') as f:
-            f.write(puzzle.examples[0].input_data)
-
-    # print("Data stored locally.")
 
 def get_input_data(base_dir):
-    """
-    Read and return the content of both example.txt and input.txt files.
-    
-    Args:
-        base_dir (str): Base directory containing the 'inputs' folder
-        
-    Returns:
-        tuple: (example_data, input_data) containing the contents of both files
-    """
-    input_dir = os.path.join(base_dir, "inputs")
-    input_file = os.path.join(input_dir, "input.txt")
-    example_file = os.path.join(input_dir, "example.txt")
-    
-    example_data = ""
-    input_data = ""
-    
-    if os.path.exists(example_file):
-        with open(example_file, 'r') as f:
-            example_data = f.read()
-            
-    if os.path.exists(input_file):
-        with open(input_file, 'r') as f:
-            input_data = f.read()
-            
-    return example_data, input_data
+    """Return (example_data, input_data) from base_dir/inputs."""
+    def read(name):
+        path = os.path.join(base_dir, "inputs", name)
+        if not os.path.exists(path):
+            return ""
+        with open(path) as f:
+            return f.read().rstrip("\n")
+    return read("example.txt"), read("input.txt")

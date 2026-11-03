@@ -1,48 +1,30 @@
-import sys
+import argparse
+import glob
 import os
+from datetime import datetime
 from importlib import import_module
-
-# Manually read the .env file and set the AOC_SESSION variable
-with open('.env') as f:
-    for line in f:
-        if line.startswith('AOC_SESSION'):
-            AOC_SESSION = line.strip().split('=')[1]
-            os.environ['AOC_SESSION'] = AOC_SESSION
+from zoneinfo import ZoneInfo
+from input_manager import ROOT, max_day
+from generate_day import generate_day
 
 
-# If no arguments are provided, determine the latest year and day
-if len(sys.argv) == 1:
-    # Assuming the directory structure is organized by year and day
-    years = sorted([d for d in os.listdir('.') if d.isdigit() and len(d) == 4], reverse=True)
-    if years:
-        latest_year = years[0]
-        days = sorted([d for d in os.listdir(latest_year) if d.startswith('day_')], reverse=True)
-        if days:
-            latest_day = days[0].split('_')[1]
-            year = latest_year
-            day = latest_day
-        else:
-            print(f"No days found for the latest year {latest_year}.")
-            sys.exit(1)
-    else:
-        print("No year directories found.")
-        sys.exit(1)
-else:
-    if len(sys.argv) != 3:
-        print("Usage: python main.py <year> <day>")
-        sys.exit(1)
-    year = sys.argv[1]
-    day = sys.argv[2]
+def default_year_day():
+    """Today's puzzle during Advent (AoC unlocks at midnight US Eastern), else the latest solved day."""
+    now = datetime.now(ZoneInfo("America/New_York"))
+    if now.month == 12 and now.day <= max_day(now.year):
+        return now.year, now.day
+    latest = max(glob.glob(os.path.join(ROOT, "[0-9]" * 4, "day_[0-9][0-9]")))
+    year, day = latest.split(os.sep)[-2:]
+    return int(year), int(day[4:])
 
-module_name = f"{year}.day_{day}.day{day}"
 
-try:
-    solution = import_module(module_name)
-    solution.run()
-except ModuleNotFoundError as e:
-    print(f"Solution for year {year}, day {day} not found.")
-    print(f"Error details: {e}")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run (and create if missing) an Advent of Code day.")
+    parser.add_argument("year", type=int, nargs="?")
+    parser.add_argument("day", type=int, nargs="?")
+    args = parser.parse_args()
+    year, day = (args.year, args.day) if args.day else default_year_day()
 
-except Exception as e:
-    print(f"An error occurred while trying to run the solution for year {year}, day {day}.")
-    print(f"Error details: {e}")
+    if not os.path.exists(os.path.join(ROOT, str(year), f"day_{day:02}", f"day{day:02}.py")):
+        generate_day(year, day)
+    import_module(f"{year}.day_{day:02}.day{day:02}").run()

@@ -1,91 +1,44 @@
 # Advent of Code Solutions
 
-This repository contains my solutions for Advent of Code challenges. The repository is structured to easily manage solutions for different years and days.
-
 ## Setup
 
-1. Create a `.env` file in the root directory with your Advent of Code session token:
-```
-AOC_SESSION=your_session_token_here
-```
-
-2. Install required dependencies:
 ```bash
 pip install -r requirements.txt
+echo "AOC_SESSION=your_session_cookie" > .env
 ```
 
-## Scripts
+The session cookie is the `session` cookie from adventofcode.com (browser dev tools).
 
-### Generate a New Day
-To create a new solution template for a specific day:
+## Usage
 
 ```bash
-python generate_day.py <year> <day>
+python main.py              # during December: today's puzzle, otherwise the latest existing day
+python main.py 2025 3       # a specific day
+python run_all_days.py 2024 # timings + correctness table for a year
 ```
 
-Example:
-```bash
-python generate_day.py 2020 7
-```
+`main.py` creates the day from `template.py` and downloads input + example if it doesn't exist yet
+(`python generate_day.py <year> <day>` does only that).
 
-This will:
-- Create a new directory for the day
-- Generate solution template files
-- Download input data from Advent of Code
-- Create an example input file
+Running a day:
+1. Runs both parts on the example and compares against the expected answers
+   (`expected_output_part_one/two` in the day file, otherwise aocd's parsed example answers).
+2. Runs both parts on the real input, then asks to submit unsolved parts (`None` results are skipped).
+   Already-solved parts are just checked against your accepted answer.
 
-### Run a Specific Day's Solution
-To run the solution for a specific day:
+Inputs are cached in `YYYY/day_XX/inputs/` (gitignored). If aocd picks the wrong example,
+edit `example.txt` and set the expected outputs in the day file.
 
-```bash
-python main.py <year> <day>
-```
+Note: from 2025 on, Advent of Code has 12 days instead of 25.
 
-Example:
-```bash
-python main.py 2020 6
-```
-
-### Run All Days
-To run solutions for all available days in a specific year:
-
-```bash
-python run_all_days.py <year>
-```
-
-Example:
-```bash
-python run_all_days.py 2020
-```
-
-This will:
-- Run all available solutions for the specified year
-- Display execution times for each part
-- Show test results with example data
-- Color-code the results (green for correct, yellow for partially correct, red for incorrect)
-
-## Project Structure
+## Structure
 
 ```
-adventofcode2024/
-├── .env                    # Environment variables (AOC session token)
-├── requirements.txt        # Python dependencies
-├── main.py                # Main runner script
-├── run_all_days.py        # Script to run all days
-├── generate_day.py        # Script to generate new day
-├── puzzle_runner.py       # Utilities for running solutions
-├── input_manager.py       # Input data management
-└── YYYY/                  # Year directory
-    └── day_XX/            # Day directory
-        ├── dayXX.py       # Solution file
-        └── inputs/        # Input directory
-            ├── input.txt  # Puzzle input
-            └── example.txt# Example input
+main.py           # run/create a day
+generate_day.py   # create a day from template.py
+run_all_days.py   # run a whole year
+puzzle_runner.py  # example testing, submitting, timing
+input_manager.py  # .env loading, input download/cache
+utils/aoc.py      # helpers imported by every day (`from utils.aoc import *`)
+YYYY/day_XX/dayXX.py
 ```
-
-## Solution Template
-Each day's solution file (`dayXX.py`) contains two main functions:
-- `solve_part_one(input_data)`: Solution for part 1
-- `solve_part_two(input_data)`: Solution for part 2
-
-The template also includes common imports and utility functions.
