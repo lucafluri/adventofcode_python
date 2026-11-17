@@ -14,11 +14,12 @@ The session cookie is the `session` cookie from adventofcode.com (browser dev to
 ```bash
 python main.py              # during December: today's puzzle, otherwise the latest existing day
 python main.py 2025 3       # a specific day
+python generate_day.py 2025 3  # only create day file + download input/example, don't run
 python run_all_days.py 2024 # timings + correctness table for a year
 ```
 
-`main.py` creates the day from `template.py` and downloads input + example if it doesn't exist yet
-(`python generate_day.py <year> <day>` does only that).
+`main.py` creates the day from `template.py` and downloads input + example if it doesn't exist yet.
+Existing input files are never overwritten; delete them to re-download.
 
 Running a day:
 1. Runs both parts on the example and compares against the expected answers
