@@ -1,5 +1,6 @@
 import sys
 import re
+import math
 from math import *
 from collections import *
 import itertools as it
@@ -14,7 +15,9 @@ from builtins import pow  # undo math.pow shadowing (float-only, no modulus)
 sys.setrecursionlimit(100000)
 
 # Directions as (dx, dy), y grows downwards: grid[y][x]
-DIR4 = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Left, Right, Up, Down
+# DIR4 is clockwise, so DIR4[(i + 1) % 4] turns right and DIR4[(i - 1) % 4] turns left
+DIR4 = [(0, -1), (1, 0), (0, 1), (-1, 0)]  # Up, Right, Down, Left
+CLOCKWISE = DIR4
 DIR8 = DIR4 + [
     (-1, -1),  # NorthWest
     (1, -1),   # NorthEast
@@ -92,6 +95,7 @@ def first(iterable, default=None):
     return next(iter(iterable), default)
 
 def product(iterable):
+    """Shadows nothing useful: itertools.product is it.product."""
     return prod(iterable)
 
 
@@ -99,6 +103,15 @@ def product(iterable):
 def neighbors(p, dirs=DIR4):
     x, y = p
     return [(x + dx, y + dy) for dx, dy in dirs]
+
+def add(p, d, k=1):
+    return (p[0] + k * d[0], p[1] + k * d[1])
+
+def turn_right(d):
+    return (-d[1], d[0])
+
+def turn_left(d):
+    return (d[1], -d[0])
 
 def inside_grid(x, y, grid):
     return 0 <= x < len(grid[0]) and 0 <= y < len(grid)
@@ -119,7 +132,9 @@ def bfs(start, next_states):
     return dist
 
 def dijkstra(start, next_states):
-    """Shortest costs from start. next_states(state) -> iterable of (cost, state)."""
+    """Shortest costs from start. next_states(state) -> iterable of (cost, state).
+    Distances only. For "all tiles on any shortest path": run it from start and from end
+    (reversed edges); a state is on one iff d_start[s] + d_end[s] == best."""
     dist = {start: 0}
     queue = [(0, start)]
     while queue:
@@ -131,6 +146,55 @@ def dijkstra(start, next_states):
                 dist[nxt] = d + cost
                 heapq.heappush(queue, (d + cost, nxt))
     return dist
+
+
+class UnionFind:
+    def __init__(self):
+        self.parent = {}
+
+    def find(self, x):
+        self.parent.setdefault(x, x)
+        while self.parent[x] != x:
+            self.parent[x] = self.parent[self.parent[x]]
+            x = self.parent[x]
+        return x
+
+    def union(self, a, b):
+        self.parent[self.find(a)] = self.find(b)
+
+
+# Search, ranges, cycles
+def first_true(lo, hi, pred):
+    """Smallest x in [lo, hi) with pred(x); pred must flip False -> True once. Returns hi if never."""
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if pred(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+
+def merge_ranges(ranges):
+    """Merge half-open [lo, hi) intervals."""
+    out = []
+    for lo, hi in sorted(ranges):
+        if out and lo <= out[-1][1]:
+            out[-1][1] = max(out[-1][1], hi)
+        else:
+            out.append([lo, hi])
+    return out
+
+def nth_state(state, step, n):
+    """State after n steps, skipping ahead once a cycle repeats. States must be hashable."""
+    seen, history = {}, []
+    while state not in seen:
+        if len(history) == n:
+            return state
+        seen[state] = len(history)
+        history.append(state)
+        state = step(state)
+    start = seen[state]
+    return history[start + (n - start) % (len(history) - start)]
 
 
 # Math
@@ -190,3 +254,17 @@ def print_list(l):
     for item in l:
         print(item)
     print()
+
+
+if __name__ == "__main__":
+    assert [DIR4[(i + 1) % 4] for i in range(4)] == [turn_right(d) for d in DIR4]
+    assert [DIR4[(i - 1) % 4] for i in range(4)] == [turn_left(d) for d in DIR4]
+    assert add((1, 2), (0, -1), 3) == (1, -1)
+    assert math.lcm(4, 6) == lcm(4, 6) == 12 and product([2, 3]) == 6
+    assert first_true(0, 100, lambda x: x * x >= 50) == 8 and first_true(0, 5, lambda x: False) == 5
+    assert merge_ranges([(5, 8), (1, 3), (3, 4), (7, 10)]) == [[1, 4], [5, 10]]
+    assert nth_state(0, lambda s: (s + 1) % 3, 10**12) == 10**12 % 3
+    assert nth_state(0, lambda s: s + 1, 7) == 7
+    uf = UnionFind(); uf.union(1, 2); uf.union(3, 2)
+    assert uf.find(1) == uf.find(3) != uf.find(4)
+    print("ok")

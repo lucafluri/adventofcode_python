@@ -1,3 +1,7 @@
 advent-of-code-data
 tabulate
 parse
+
+# Optional: graph shortcuts / equation systems
+networkx
+z3-solver
