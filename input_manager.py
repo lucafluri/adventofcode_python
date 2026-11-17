@@ -8,11 +8,14 @@ def load_env():
     """Load AOC_SESSION from .env (optional; aocd also reads ~/.config/aocd/token)."""
     path = os.path.join(ROOT, ".env")
     if os.path.exists(path):
-        with open(path) as f:
-            for line in f:
-                key, _, value = line.strip().partition("=")
-                if key == "AOC_SESSION":
-                    os.environ["AOC_SESSION"] = value.strip().strip('"\'')
+        with open(path, "rb") as f:
+            raw = f.read()
+        # PowerShell's `>` writes UTF-16 with BOM; editors write UTF-8 (maybe with BOM)
+        text = raw.decode("utf-16" if raw[:2] in (b"\xff\xfe", b"\xfe\xff") else "utf-8-sig")
+        for line in text.splitlines():
+            key, _, value = line.strip().removeprefix("export ").partition("=")
+            if key.strip() == "AOC_SESSION":
+                os.environ["AOC_SESSION"] = value.strip().strip('"\'')
 
 
 load_env()
